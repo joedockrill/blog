@@ -1,4 +1,4 @@
---
+---
 toc: true
 layout: post
 description: 
@@ -48,14 +48,14 @@ guess at whether they are girls or single women.
 
 **Plotting.** \
 After that I did some basic plotting to look at survival rates.
-[](../images/TitanicEDA1.jpg)
+[](/blog/images/TitanicEDA1.jpg)
 
 Unsurprisingly women and children did better than men, but within children, girls did better than boys.
 
 There’s nothing especially stunning jumping out at this point.
 
 Next I ran some regression plots to look at survival rates by age on a line.
-[](../images/TitanicEDA2.jpg)
+[](/blog/images/TitanicEDA2.jpg)
 
 There is obviously at least one outlier in the male data causing an issue and I need to look at trimming here. Boys and girls needs further attention, possibly by Pclass.
 
