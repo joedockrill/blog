@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Image scraping DuckDuckGo and Google | Joe Dockrill</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Image scraping DuckDuckGo and Google" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Image scraper notebook for creating DL datasets" />
+<meta property="og:description" content="Image scraper notebook for creating DL datasets" />
+<link rel="canonical" href="https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html" />
+<meta property="og:site_name" content="Joe Dockrill" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Image scraper notebook for creating DL datasets","@type":"BlogPosting","headline":"Image scraping DuckDuckGo and Google","url":"https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html","datePublished":"2020-07-13T00:00:00-05:00","dateModified":"2020-07-13T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Image scraping DuckDuckGo and Google | Joe Dockrill</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Image scraping DuckDuckGo and Google" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Image scraper notebook for creating DL datasets" />
+<meta property="og:description" content="Image scraper notebook for creating DL datasets" />
+<link rel="canonical" href="https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html" />
+<meta property="og:site_name" content="Joe Dockrill" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-13T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Image scraper notebook for creating DL datasets","@type":"BlogPosting","headline":"Image scraping DuckDuckGo and Google","url":"https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html","datePublished":"2020-07-13T00:00:00-05:00","dateModified":"2020-07-13T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body>
+    <img src="/blog/images/web-header-wide.png"><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Home</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Image scraping DuckDuckGo and Google</h1><p class="page-description">Image scraper notebook for creating DL datasets</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-13T00:00:00-05:00" itemprop="datePublished">
+        Jul 13, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      5 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#DL">DL</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/joedockrill/blog/tree/master/_notebooks/2020-07-13-Image-scraping-duckduckgo-and-google.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/blog/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/joedockrill/blog/blob/master/_notebooks/2020-07-13-Image-scraping-duckduckgo-and-google.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/blog/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-07-13-Image-scraping-duckduckgo-and-google.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>I’ve written a notebook for scraping images from DuckDuckGo and Google for the purpose of creating DL datasets.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You download images by labels like so:</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">ZIP_NAME</span> <span class="o">=</span> <span class="s2">"pets.zip"</span>
+
+<span class="n">duckduckgo_search</span><span class="p">(</span><span class="s2">"Dogs"</span><span class="p">,</span> <span class="s2">"dogs puppies"</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">duckduckgo_search</span><span class="p">(</span><span class="s2">"Cats"</span><span class="p">,</span> <span class="s2">"cats kittens"</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">duckduckgo_search</span><span class="p">(</span><span class="s2">"Birds"</span><span class="p">,</span> <span class="s2">"parrots budgies cockatoos"</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Duckduckgo search: dogs puppies
+Downloading 20 results into images/Dogs
+Duckduckgo search: cats kittens
+Downloading 20 results into images/Cats
+Duckduckgo search: parrots budgies cockatoos
+Downloading 20 results into images/Birds
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can constrain DDG searches as follows:</p>
+
+<pre><code>duckduckgo_search(label: str, keywords: str, max_results: int=100,
+                      img_size: ImgSize=ImgSize.Thumbs, 
+                      img_type: ImgType=ImgType.Photo,
+                      img_layout: ImgLayout=ImgLayout.Square,
+                      img_color: ImgColor=ImgColor.All) -&gt; None:
+
+img_size can be one of the following: (default=ImgSize.Thumbs)
+Thumbs, Small, Medium, Large, Wallpaper
+
+img_type can be one of the following: (default=ImgType.Photo)
+All, Photo, Clipart, Gif, Transparent
+
+img_layout can be one of the following: (default=ImgLayout.Square)
+All, Square, Tall, Wide
+
+img_color can be one of the following: (default = ImgColor.All)
+All, Color, Monochrome, Red, Orange, Yellow, Green, Blue, Purple, Pink, Brown, Black, Gray, Teal, White</code></pre>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Then you can run an image cleaner inside the notebook to get rid of anything which doesn't belong.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1">#@title Dataset Cleaner</span>
+<span class="c1">#@markdown Run this cell for a dataset cleaner you can use to get rid of inappropriate</span>
+<span class="c1">#@markdown images before zipping up your dataset.</span>
+
+<span class="c1">#@markdown ---</span>
+
+<span class="c1">##########################################################################################</span>
+<span class="c1"># globals &amp; event handler</span>
+<span class="c1">##########################################################################################</span>
+<span class="n">ICLN_BATCH_SZ</span> <span class="o">=</span> <span class="mi">8</span>
+
+<span class="c1"># this may look nauseating and but creating new widgets is literally about 10x slower than </span>
+<span class="c1"># updating existing ones so the ui gets created once and updated forever more</span>
+<span class="n">icln_folder</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">icln_batches</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">icln_pager</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">icln_grid</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">icln_empty_folder</span> <span class="o">=</span> <span class="kc">None</span>
+
+<span class="k">def</span> <span class="nf">delete_on_click</span><span class="p">(</span><span class="n">btn</span><span class="p">):</span>
+  <span class="n">fn</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">idx</span> <span class="o">=</span> <span class="n">btn</span><span class="o">.</span><span class="n">tag</span>
+  <span class="n">img</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">icln_deleted_img</span><span class="p">()</span> <span class="c1"># display red 'deleted' cross</span>
+  <span class="n">icln_batches</span><span class="p">[</span><span class="n">batch</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span> <span class="o">=</span> <span class="s2">""</span>  <span class="c1"># so we know it's deleted as we page back &amp; forth</span>
+  <span class="n">btn</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+  <span class="k">try</span><span class="p">:</span>    <span class="n">Path</span><span class="p">(</span><span class="n">fn</span><span class="p">)</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>      <span class="c1"># dbl-clicks result in us trying to delete twice</span>
+  <span class="k">except</span><span class="p">:</span> <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">paging_on_click</span><span class="p">(</span><span class="n">btn</span><span class="p">):</span>
+  <span class="n">folder</span><span class="p">,</span> <span class="n">batch</span> <span class="o">=</span> <span class="n">btn</span><span class="o">.</span><span class="n">tag</span>
+  <span class="n">icln_render_batch</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">batch</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">reload_on_click</span><span class="p">(</span><span class="n">btn</span><span class="p">):</span>
+  <span class="n">icln_render_batch</span><span class="p">(</span><span class="n">icln_folder</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">force_reload</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">folder_on_change</span><span class="p">(</span><span class="n">change</span><span class="p">):</span>
+  <span class="k">if</span><span class="p">(</span><span class="n">change</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"change"</span> <span class="ow">and</span> <span class="n">change</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"value"</span><span class="p">):</span>
+    <span class="n">icln_render_batch</span><span class="p">(</span><span class="n">change</span><span class="p">[</span><span class="s2">"new"</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+  
+<span class="c1">##########################################################################################</span>
+<span class="c1"># UI creation</span>
+<span class="c1">##########################################################################################</span>
+<span class="k">def</span> <span class="nf">icln_deleted_img</span><span class="p">():</span>
+  <span class="c1"># creates the red "deleted" placeholder cross once, loads it and caches it</span>
+  <span class="n">DELETED_IMG</span> <span class="o">=</span> <span class="s2">"deleted_img"</span>
+  
+  <span class="k">if</span><span class="p">(</span><span class="n">DELETED_IMG</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">icln_deleted_img</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">PImage</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s2">"RGB"</span><span class="p">,(</span><span class="mi">150</span><span class="p">,</span><span class="mi">150</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">"white"</span><span class="p">)</span>
+
+    <span class="n">draw</span> <span class="o">=</span> <span class="n">PImageDraw</span><span class="o">.</span><span class="n">Draw</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">140</span><span class="p">),</span> <span class="n">fill</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+    <span class="n">draw</span><span class="o">.</span><span class="n">line</span><span class="p">((</span><span class="mi">5</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">140</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="n">fill</span><span class="o">=</span><span class="s2">"red"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+
+    <span class="c1"># must be able to go from pil to something the widget likes without bouncing off disc :-/</span>
+    <span class="n">img</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"deleted.jpg"</span><span class="p">)</span>  
+    <span class="n">icln_deleted_img</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">DELETED_IMG</span><span class="p">]</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s2">"deleted.jpg"</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+
+  <span class="k">return</span> <span class="n">icln_deleted_img</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">[</span><span class="n">DELETED_IMG</span><span class="p">]</span>
+
+<span class="k">def</span> <span class="nf">icln_create_widgets</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+  <span class="c1"># create the UI widgets</span>
+  <span class="k">global</span> <span class="n">icln_pager</span>
+  <span class="k">global</span> <span class="n">icln_grid</span>
+  <span class="k">global</span> <span class="n">icln_empty_folder</span>
+
+  <span class="c1"># image/delete button pairs</span>
+  <span class="n">display_items</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">batch_size</span><span class="p">):</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Image</span><span class="p">()</span>
+    <span class="n">img</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">width</span><span class="o">=</span><span class="s2">"150px"</span>
+    <span class="n">btn</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"Delete"</span><span class="p">)</span>
+    <span class="n">btn</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">delete_on_click</span><span class="p">)</span>
+    <span class="n">box</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">VBox</span><span class="p">(</span><span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">img</span><span class="p">,</span><span class="n">btn</span><span class="p">])</span>
+    <span class="n">box</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="s2">"5px"</span>
+    <span class="n">display_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">box</span><span class="p">)</span>
+
+  <span class="c1"># paging</span>
+  <span class="n">btnFirst</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"|&lt;&lt;"</span><span class="p">)</span> 
+  <span class="n">btnPrev</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"&lt;&lt;"</span><span class="p">)</span>
+  <span class="n">lblPage</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Label</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">"Page NNN of KKK"</span><span class="p">)</span>
+  <span class="n">lblPage</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">display</span><span class="o">=</span><span class="s2">"flex"</span><span class="p">,</span> <span class="n">justify_content</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="s2">"100px"</span><span class="p">)</span>
+  <span class="n">btnNext</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"&gt;&gt;"</span><span class="p">)</span>
+  <span class="n">btnLast</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"&gt;&gt;|"</span><span class="p">)</span>
+  
+  <span class="n">pgbtns</span> <span class="o">=</span> <span class="p">[</span><span class="n">btnFirst</span><span class="p">,</span> <span class="n">btnPrev</span><span class="p">,</span> <span class="n">btnNext</span><span class="p">,</span> <span class="n">btnLast</span><span class="p">]</span>
+  <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="n">pgbtns</span><span class="p">:</span> <span class="n">btn</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">paging_on_click</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="n">pgbtns</span><span class="p">:</span> <span class="n">btn</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">width</span> <span class="o">=</span> <span class="s2">"60px"</span>
+
+  <span class="c1"># folder drop down</span>
+  <span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">BASE_FOLDER</span><span class="p">)</span>
+  <span class="n">folders</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="o">.</span><span class="n">stem</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span> <span class="k">if</span> <span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span> <span class="ow">and</span> <span class="n">f</span><span class="o">.</span><span class="n">stem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">"."</span><span class="p">)]</span>
+  <span class="n">folders</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+  <span class="n">rootfiles</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">root</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*"</span><span class="p">)</span> <span class="k">if</span> <span class="n">f</span><span class="o">.</span><span class="n">is_file</span><span class="p">()]</span>
+  <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rootfiles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span> <span class="n">folders</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"/"</span><span class="p">]</span> <span class="o">+</span> <span class="n">folders</span>
+  <span class="n">ddlFolder</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Dropdown</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">folders</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">"Folder: "</span><span class="p">)</span>
+  <span class="n">ddlFolder</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="n">folder_on_change</span><span class="p">)</span>
+
+  <span class="c1"># reload button</span>
+  <span class="n">btnReload</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Button</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">"↻"</span><span class="p">)</span>
+  <span class="n">btnReload</span><span class="o">.</span><span class="n">layout</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="s2">"40px"</span><span class="p">,</span> <span class="n">margin</span><span class="o">=</span><span class="s2">"0px 0px 0px 10px"</span><span class="p">)</span>
+  <span class="n">btnReload</span><span class="o">.</span><span class="n">on_click</span><span class="p">(</span><span class="n">reload_on_click</span><span class="p">)</span>
+
+  <span class="c1"># plug it all in and display</span>
+  <span class="n">icln_pager</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">HBox</span><span class="p">(</span><span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">btnFirst</span><span class="p">,</span> <span class="n">btnPrev</span><span class="p">,</span> <span class="n">lblPage</span><span class="p">,</span> <span class="n">btnNext</span><span class="p">,</span> <span class="n">btnLast</span><span class="p">,</span> 
+                                      <span class="n">ddlFolder</span><span class="p">,</span> <span class="n">btnReload</span><span class="p">])</span>  
+  <span class="n">icln_grid</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">GridBox</span><span class="p">(</span><span class="n">display_items</span><span class="p">,</span> 
+                              <span class="n">layout</span><span class="o">=</span><span class="n">widgets</span><span class="o">.</span><span class="n">Layout</span><span class="p">(</span><span class="n">grid_template_columns</span><span class="o">=</span><span class="s2">"repeat(4, 25%)"</span><span class="p">,</span>
+                                                    <span class="n">margin</span><span class="o">=</span><span class="s2">"15px"</span><span class="p">))</span>
+  <span class="n">icln_empty_folder</span> <span class="o">=</span> <span class="n">widgets</span><span class="o">.</span><span class="n">HTML</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="s2">"&lt;h2&gt;No images left to display in this folder.&lt;/h2&gt;"</span><span class="p">)</span>
+  <span class="n">icln_empty_folder</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span>
+
+  <span class="n">display</span><span class="p">(</span><span class="n">icln_pager</span><span class="p">)</span>
+  <span class="n">display</span><span class="p">(</span><span class="n">icln_empty_folder</span><span class="p">)</span>
+  <span class="n">display</span><span class="p">(</span><span class="n">icln_grid</span><span class="p">)</span>
+  
+<span class="c1">##########################################################################################</span>
+<span class="c1"># UI rendering</span>
+<span class="c1">##########################################################################################</span>
+<span class="k">def</span> <span class="nf">icln_render_batch</span><span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">force_reload</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+  <span class="k">global</span> <span class="n">icln_folder</span>
+  <span class="k">global</span> <span class="n">icln_batches</span>
+  <span class="k">global</span> <span class="n">icln_pager</span>
+  <span class="k">global</span> <span class="n">icln_grid</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="n">folder</span> <span class="o">==</span> <span class="s2">"/"</span><span class="p">):</span> <span class="n">folder</span> <span class="o">=</span> <span class="s2">""</span>
+  <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">BASE_FOLDER</span><span class="p">)</span><span class="o">/</span><span class="n">folder</span>
+
+  <span class="k">if</span><span class="p">((</span><span class="n">icln_folder</span> <span class="o">!=</span> <span class="n">folder</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">force_reload</span><span class="p">)):</span> 
+    <span class="c1"># get the files, split into batches  </span>
+    <span class="n">files</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"*.jpg"</span><span class="p">))</span>
+    <span class="n">icln_batches</span> <span class="o">=</span> <span class="p">[</span><span class="n">files</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">i</span> <span class="o">+</span> <span class="n">ICLN_BATCH_SZ</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">),</span> <span class="n">ICLN_BATCH_SZ</span><span class="p">)]</span>
+    <span class="n">icln_folder</span> <span class="o">=</span> <span class="n">folder</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+      <span class="c1"># fail gracefully if they've deleted every image in this folder</span>
+      <span class="n">icln_empty_folder</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"visible"</span>
+      <span class="c1"># icln_grid.layout.visibility = "hidden" &lt;-- doesn't work :-@</span>
+      <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">icln_grid</span><span class="o">.</span><span class="n">children</span><span class="p">:</span> <span class="n">child</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span>
+      <span class="n">btnFirst</span><span class="p">,</span> <span class="n">btnPrev</span><span class="p">,</span> <span class="n">lblPage</span><span class="p">,</span> <span class="n">btnNext</span><span class="p">,</span> <span class="n">btnLast</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">icln_pager</span><span class="o">.</span><span class="n">children</span>
+      <span class="n">lblPage</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">"Page 0 of 0"</span>
+      <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="p">[</span><span class="n">btnFirst</span><span class="p">,</span> <span class="n">btnPrev</span><span class="p">,</span> <span class="n">btnNext</span><span class="p">,</span> <span class="n">btnLast</span><span class="p">]:</span> <span class="n">btn</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+      <span class="k">return</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">icln_empty_folder</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span>
+      <span class="n">icln_grid</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"visible"</span>
+
+  <span class="c1"># display the images</span>
+  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">icln_batches</span><span class="p">[</span><span class="n">batch</span><span class="p">]):</span>
+    <span class="n">icln_grid</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"visible"</span>
+    <span class="n">img</span> <span class="o">=</span> <span class="n">icln_grid</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">btn</span> <span class="o">=</span> <span class="n">icln_grid</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">fp</span> <span class="o">==</span> <span class="s2">""</span><span class="p">):</span>
+      <span class="n">img</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">icln_deleted_img</span><span class="p">()</span>
+      <span class="n">btn</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="n">img</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="s2">"rb"</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+      <span class="n">btn</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+      <span class="n">btn</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">False</span>
+
+  <span class="k">if</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">icln_batches</span><span class="p">[</span><span class="n">batch</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">ICLN_BATCH_SZ</span><span class="p">):</span>
+    <span class="c1"># partial batch on the last page, hide the rest of the grid</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">icln_batches</span><span class="p">[</span><span class="n">batch</span><span class="p">]),</span> <span class="n">ICLN_BATCH_SZ</span><span class="p">):</span>
+      <span class="n">icln_grid</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">layout</span><span class="o">.</span><span class="n">visibility</span> <span class="o">=</span> <span class="s2">"hidden"</span>
+    
+  <span class="c1"># update the paging controls</span>
+  <span class="n">btnFirst</span><span class="p">,</span> <span class="n">btnPrev</span><span class="p">,</span> <span class="n">lblPage</span><span class="p">,</span> <span class="n">btnNext</span><span class="p">,</span> <span class="n">btnLast</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">icln_pager</span><span class="o">.</span><span class="n">children</span>
+  <span class="n">btnFirst</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> 
+  <span class="n">btnPrev</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">batch</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span> 
+  <span class="n">btnNext</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">icln_batches</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span> 
+  <span class="n">btnLast</span><span class="o">.</span><span class="n">tag</span> <span class="o">=</span> <span class="p">(</span><span class="n">folder</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">icln_batches</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> 
+  <span class="n">lblPage</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="s2">"Page </span><span class="si">{}</span><span class="s2"> of </span><span class="si">{}</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">batch</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">icln_batches</span><span class="p">))</span>
+  <span class="k">for</span> <span class="n">btn</span> <span class="ow">in</span> <span class="p">[</span><span class="n">btnFirst</span><span class="p">,</span> <span class="n">btnPrev</span><span class="p">,</span> <span class="n">btnNext</span><span class="p">,</span> <span class="n">btnLast</span><span class="p">]:</span> <span class="n">btn</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="n">btn</span><span class="o">.</span><span class="n">tag</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">batch</span>
+
+<span class="c1">##########################################################################################</span>
+<span class="c1"># and to actually create the UI and render the first folder in the list:</span>
+<span class="c1">##########################################################################################</span>
+<span class="n">icln_create_widgets</span><span class="p">(</span><span class="n">ICLN_BATCH_SZ</span><span class="p">)</span>
+<span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">_</span><span class="p">,</span><span class="n">ddlFolder</span><span class="p">,</span><span class="n">_</span> <span class="o">=</span> <span class="n">icln_pager</span><span class="o">.</span><span class="n">children</span>
+<span class="n">icln_render_batch</span><span class="p">(</span><span class="n">ddlFolder</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>After that you zip it all up, an either download it or transfer it to your Google Drive.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>rm -f <span class="o">{</span>ZIP_NAME<span class="o">}</span>
+<span class="o">!</span>zip -q -r <span class="o">{</span>ZIP_NAME<span class="o">}</span> images
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># download to your local system</span>
+<span class="n">download_file</span><span class="p">(</span><span class="n">ZIP_NAME</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># copy to google drive </span>
+<span class="n">transfer_to_drive</span><span class="p">(</span><span class="n">ZIP_NAME</span><span class="p">,</span> <span class="n">dest_folder</span><span class="o">=</span><span class="s2">"Datasets"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can also distribute CSV files with URLs/label pairs if you want a massive dataset and a small distributable, and have people download the images themselves.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="n">CSV_NAME</span> <span class="o">=</span> <span class="s2">"pets.csv"</span>
+
+<span class="o">!</span>rm -f <span class="o">{</span>CSV_NAME<span class="o">}</span>
+
+<span class="n">save_urls</span><span class="p">(</span><span class="n">CSV_NAME</span><span class="p">,</span> <span class="n">duckduckgo_scrape_urls</span><span class="p">,</span> <span class="s2">"dogs"</span><span class="p">,</span> <span class="s2">"dogs or puppies"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">save_urls</span><span class="p">(</span><span class="n">CSV_NAME</span><span class="p">,</span> <span class="n">duckduckgo_scrape_urls</span><span class="p">,</span> <span class="s2">"cats"</span><span class="p">,</span> <span class="s2">"cats or kittens"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+<span class="n">save_urls</span><span class="p">(</span><span class="n">CSV_NAME</span><span class="p">,</span> <span class="n">duckduckgo_scrape_urls</span><span class="p">,</span> <span class="s2">"rabbits"</span><span class="p">,</span> <span class="s2">"rabbits sitting in mugs"</span><span class="p">,</span> <span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># download to your local system</span>
+<span class="n">download_file</span><span class="p">(</span><span class="n">CSV_NAME</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># copy to google drive </span>
+<span class="n">transfer_to_drive</span><span class="p">(</span><span class="n">CSV_NAME</span><span class="p">,</span> <span class="n">dest_folder</span><span class="o">=</span><span class="s2">"Datasets"</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>You can find it here: <a href="https://github.com/joedockrill/image-scraper">github.com/joedockrill/image-scraper</a></p>
+
+</div>
+</div>
+</div>
+</div>
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"57deb9a300164680ba92e16cf6ca23fe": {"model_module": "@jupyter-widgets/controls", "model_name": "IntProgressModel", "state": {"_view_name": "ProgressView", "style": "IPY_MODEL_249354673a3f45a49c204cde9bbb7b95", "_dom_classes": [], "description": "", "_model_name": "IntProgressModel", "bar_style": "success", "max": 19, "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": 19, "_view_count": null, "_view_module_version": "1.5.0", "orientation": "horizontal", "min": 0, "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_59c2fcd1b8ca4458a562d295332dfa8a"}}, "249354673a3f45a49c204cde9bbb7b95": {"model_module": "@jupyter-widgets/controls", "model_name": "ProgressStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ProgressStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "bar_color": null, "_model_module": "@jupyter-widgets/controls"}}, "59c2fcd1b8ca4458a562d295332dfa8a": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "1cd0fe4eabee42e0a9f59e0057ffabb5": {"model_module": "@jupyter-widgets/controls", "model_name": "IntProgressModel", "state": {"_view_name": "ProgressView", "style": "IPY_MODEL_f9ebac8f7780409c8086886d476553ed", "_dom_classes": [], "description": "", "_model_name": "IntProgressModel", "bar_style": "success", "max": 19, "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": 19, "_view_count": null, "_view_module_version": "1.5.0", "orientation": "horizontal", "min": 0, "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_b3d9140fe4fe4eaea75f4d0e1e1a8f40"}}, "f9ebac8f7780409c8086886d476553ed": {"model_module": "@jupyter-widgets/controls", "model_name": "ProgressStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ProgressStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "bar_color": null, "_model_module": "@jupyter-widgets/controls"}}, "b3d9140fe4fe4eaea75f4d0e1e1a8f40": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "1c0dd26133074336aef46a0de180efc5": {"model_module": "@jupyter-widgets/controls", "model_name": "IntProgressModel", "state": {"_view_name": "ProgressView", "style": "IPY_MODEL_f387c45fb06b4961a917cdbc74ffd8f6", "_dom_classes": [], "description": "", "_model_name": "IntProgressModel", "bar_style": "success", "max": 19, "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": 19, "_view_count": null, "_view_module_version": "1.5.0", "orientation": "horizontal", "min": 0, "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_6aa9ddd88fa947cb83e9a4dee719ccac"}}, "f387c45fb06b4961a917cdbc74ffd8f6": {"model_module": "@jupyter-widgets/controls", "model_name": "ProgressStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ProgressStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "bar_color": null, "_model_module": "@jupyter-widgets/controls"}}, "6aa9ddd88fa947cb83e9a4dee719ccac": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "d885c0d0bd0e435baa3300916392b8be": {"model_module": "@jupyter-widgets/controls", "model_name": "HBoxModel", "state": {"_view_name": "HBoxView", "_dom_classes": [], "_model_name": "HBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_e442689a8bb641ea98fef35d838f5fff", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_bf2b9a54af8542ac87cac4c7a9bcb3ff", "IPY_MODEL_7a0847bd3b2e433c9c469aa4c63c8098", "IPY_MODEL_39e3dd4314bb4700b128fdf1018b9020", "IPY_MODEL_1724beff915b48a3848843391939f81d", "IPY_MODEL_e2f72396f208456aa9552e12ef76646b", "IPY_MODEL_15e6a7fb034b4ac993d2066fbf373742", "IPY_MODEL_785b0fb43d6d4f90b71ef48e82da621e"]}}, "e442689a8bb641ea98fef35d838f5fff": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "bf2b9a54af8542ac87cac4c7a9bcb3ff": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_b0e0f19925d94befabea054219133720", "_dom_classes": [], "description": "|<<", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": true, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_c6d499869f72432a93a9118cf0075caa", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "7a0847bd3b2e433c9c469aa4c63c8098": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_136b74a1970f47e48cfd97c37c198d1a", "_dom_classes": [], "description": "<<", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": true, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_91265106fb034fe78675c7c8b096ffa7", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "39e3dd4314bb4700b128fdf1018b9020": {"model_module": "@jupyter-widgets/controls", "model_name": "LabelModel", "state": {"_view_name": "LabelView", "style": "IPY_MODEL_545cc06d906e4eb7b1888cd556018889", "_dom_classes": [], "description": "", "_model_name": "LabelModel", "placeholder": "\u200b", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": "Page 1 of 3", "_view_count": null, "_view_module_version": "1.5.0", "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_98ac6bacba734a33b512853afd4b4d44"}}, "1724beff915b48a3848843391939f81d": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_1f2f55c99049476f82c76943d34abdf5", "_dom_classes": [], "description": ">>", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_ed12084032e243e6a9bf991b3fed3fe1", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "e2f72396f208456aa9552e12ef76646b": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_c20e4099e256400aa848fa270e0cd9a2", "_dom_classes": [], "description": ">>|", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_01cc153dc7f845dca02dc1efe8f70d4e", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "15e6a7fb034b4ac993d2066fbf373742": {"model_module": "@jupyter-widgets/controls", "model_name": "DropdownModel", "state": {"_options_labels": ["Birds", "Cats", "Dogs"], "_view_name": "DropdownView", "style": "IPY_MODEL_af06fff8ed0c4a3daf0bce5b3520504b", "_dom_classes": [], "description": "Folder: ", "_model_name": "DropdownModel", "index": 0, "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_3d740e236fd94b7db23be5cd3d3639c4"}}, "785b0fb43d6d4f90b71ef48e82da621e": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_4ce40a9cdf3645b6b7b51cf17ffca376", "_dom_classes": [], "description": "\u21bb", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_540fe1050f294cbcbf92cf1ca5e26666", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "b0e0f19925d94befabea054219133720": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "c6d499869f72432a93a9118cf0075caa": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "136b74a1970f47e48cfd97c37c198d1a": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "91265106fb034fe78675c7c8b096ffa7": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "545cc06d906e4eb7b1888cd556018889": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "state": {"_view_name": "StyleView", "_model_name": "DescriptionStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "98ac6bacba734a33b512853afd4b4d44": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": "center", "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "100px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": "flex", "left": null}}, "1f2f55c99049476f82c76943d34abdf5": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "ed12084032e243e6a9bf991b3fed3fe1": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "c20e4099e256400aa848fa270e0cd9a2": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "01cc153dc7f845dca02dc1efe8f70d4e": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "af06fff8ed0c4a3daf0bce5b3520504b": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "state": {"_view_name": "StyleView", "_model_name": "DescriptionStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "3d740e236fd94b7db23be5cd3d3639c4": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "4ce40a9cdf3645b6b7b51cf17ffca376": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "540fe1050f294cbcbf92cf1ca5e26666": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "40px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "0px 0px 0px 10px", "display": null, "left": null}}, "13eaf5b574604756989ed39a9755ddaa": {"model_module": "@jupyter-widgets/controls", "model_name": "HTMLModel", "state": {"_view_name": "HTMLView", "style": "IPY_MODEL_85b3e76a4de7417588965853384a428e", "_dom_classes": [], "description": "", "_model_name": "HTMLModel", "placeholder": "\u200b", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": "<h2>No images left to display in this folder.</h2>", "_view_count": null, "_view_module_version": "1.5.0", "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_de66d631eec5443d8afa2c9e82d78e37"}}, "85b3e76a4de7417588965853384a428e": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "state": {"_view_name": "StyleView", "_model_name": "DescriptionStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "de66d631eec5443d8afa2c9e82d78e37": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "hidden", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "6cda78be54db48568ee6af21ab9ae2a1": {"model_module": "@jupyter-widgets/controls", "model_name": "GridBoxModel", "state": {"_view_name": "GridBoxView", "_dom_classes": [], "_model_name": "GridBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_a735098fe8d24ee790b3e69c902560e5", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_e98008efd03f4eafa28183b225c54d5c", "IPY_MODEL_0f248f53f5404f87984367a8dfccb78e", "IPY_MODEL_377008133c8a4f79b4214d1927b7be7e", "IPY_MODEL_641e323cce1a4621a00f59a9602b9329", "IPY_MODEL_650e8c54797b4db4aaa4f23816c3c7a4", "IPY_MODEL_48c463066c86405dbc02ae8045445ac4", "IPY_MODEL_f158770457d44df28441187633764f29", "IPY_MODEL_1c9bddab60584fec958e13bbf43e972c"]}}, "a735098fe8d24ee790b3e69c902560e5": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": "repeat(4, 25%)", "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "15px", "display": null, "left": null}}, "e98008efd03f4eafa28183b225c54d5c": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_7acd4b36c9f945ae92e18b5ba20b73d7", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_dd55e279aca64c03994400153be54398", "IPY_MODEL_6234266d03f9459f9405723ab616093c"]}}, "0f248f53f5404f87984367a8dfccb78e": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_0cdec3bb64b54b7282817c7379c0b80c", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_eb674a0395c74cbcb1ca3f4666aee4bf", "IPY_MODEL_551732b3fb6746d684594ac86bf6d56c"]}}, "377008133c8a4f79b4214d1927b7be7e": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_d51693deb8cf4632bf5880ab0bb2641c", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_a7e85d284d3f4707a662be60b4e86ee7", "IPY_MODEL_94889de1bd1e4b61953c2eb530e16e47"]}}, "641e323cce1a4621a00f59a9602b9329": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_7722231d67614ee992da2e51fd0fe879", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_70fab2abf7a54cc4802314f4eca60bc7", "IPY_MODEL_57268cbde6cb49f4ac4ed993b9b48423"]}}, "650e8c54797b4db4aaa4f23816c3c7a4": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_9a48f4837d564c8abc0b9ca9c98cc3bb", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_601e6258aabe4ce2821a94ed3e36ae8a", "IPY_MODEL_5ccc68bd53eb4b52af782cac2f9dbc01"]}}, "48c463066c86405dbc02ae8045445ac4": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_bbbe5145f6c241199874cc8bf8d3b81e", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_a7a51c6edd6b49c68076df1844628cc0", "IPY_MODEL_924cac2d2ec84d0aa1f3759087000b39"]}}, "f158770457d44df28441187633764f29": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_39bd2c2111b84ef2b9a8120e1c86ff2b", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_22a470aceb2e4908a5697703171c82a5", "IPY_MODEL_e6da65a271054aae8789c3d084ccbe4d"]}}, "1c9bddab60584fec958e13bbf43e972c": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_d14b85fe5e9d4a93bf65ee4ed209783c", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_88d74c77dabd4bc19eb1ba153aa08ae1", "IPY_MODEL_a7851be29c224abf8ef635ed8ddb8190"]}}, "7acd4b36c9f945ae92e18b5ba20b73d7": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "dd55e279aca64c03994400153be54398": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_bf6524ea2fd248b9bdacf17e66dcf17e", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "6234266d03f9459f9405723ab616093c": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_ce75b0f0995640c890887958a23b4656", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_a79acc4468c1428281f2792c6f07b3fe", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "0cdec3bb64b54b7282817c7379c0b80c": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "eb674a0395c74cbcb1ca3f4666aee4bf": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_46fd1f46e423431a82784c4844d17f67", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "551732b3fb6746d684594ac86bf6d56c": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_66ed14fdfc2345a2b2795bc91bb3b3d9", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_58af292efea54f02b725696c878a621a", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "d51693deb8cf4632bf5880ab0bb2641c": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "a7e85d284d3f4707a662be60b4e86ee7": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_14aafa69d6eb4de0ac5f9614774630f6", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "94889de1bd1e4b61953c2eb530e16e47": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_d964d58639ec4ad891dd04b03cc831ba", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_aa32b08ba7a84b1ab3f56f3793450cc3", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "7722231d67614ee992da2e51fd0fe879": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "70fab2abf7a54cc4802314f4eca60bc7": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_d7cbef85fa634dac9c1d2df73989ac67", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "57268cbde6cb49f4ac4ed993b9b48423": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_a49644f258194c62a57810e3c3320bdd", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_cba30792d37540f69e87e1d36504df37", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "9a48f4837d564c8abc0b9ca9c98cc3bb": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "601e6258aabe4ce2821a94ed3e36ae8a": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_8dc40094dd364cf98de014bf611bc0ca", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "5ccc68bd53eb4b52af782cac2f9dbc01": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_d1f779c5f03141d2a99c68eff360e744", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_6bf40800d82a4307ae69bdb5bc8a428b", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "bbbe5145f6c241199874cc8bf8d3b81e": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "a7a51c6edd6b49c68076df1844628cc0": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_27ed8085f9514ca98ff0458899bc66d9", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "924cac2d2ec84d0aa1f3759087000b39": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_b4650c7e32fb4b79abbd18c194b4f76b", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_b487fc4e3d5f47c5acde940ac4dfc89d", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "39bd2c2111b84ef2b9a8120e1c86ff2b": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "22a470aceb2e4908a5697703171c82a5": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_3e4c9a60deae40a6bba741167c41a68d", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "e6da65a271054aae8789c3d084ccbe4d": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_ab8ee9b99ebb4c73a4ab3c5b19818b80", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_7bd99a62de2a4649b888b04d6008bac0", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "d14b85fe5e9d4a93bf65ee4ed209783c": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "88d74c77dabd4bc19eb1ba153aa08ae1": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_f701f4abf9bc4f44b927708247536fe6", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "a7851be29c224abf8ef635ed8ddb8190": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_892715a3e09346269cc38cd228436e16", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_ad898fea706d4ff9933596bc75f70d8a", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "bf6524ea2fd248b9bdacf17e66dcf17e": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "ce75b0f0995640c890887958a23b4656": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "a79acc4468c1428281f2792c6f07b3fe": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "46fd1f46e423431a82784c4844d17f67": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "66ed14fdfc2345a2b2795bc91bb3b3d9": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "58af292efea54f02b725696c878a621a": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "14aafa69d6eb4de0ac5f9614774630f6": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "d964d58639ec4ad891dd04b03cc831ba": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "aa32b08ba7a84b1ab3f56f3793450cc3": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "d7cbef85fa634dac9c1d2df73989ac67": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "a49644f258194c62a57810e3c3320bdd": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "cba30792d37540f69e87e1d36504df37": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "8dc40094dd364cf98de014bf611bc0ca": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "d1f779c5f03141d2a99c68eff360e744": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "6bf40800d82a4307ae69bdb5bc8a428b": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "27ed8085f9514ca98ff0458899bc66d9": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "b4650c7e32fb4b79abbd18c194b4f76b": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "b487fc4e3d5f47c5acde940ac4dfc89d": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "3e4c9a60deae40a6bba741167c41a68d": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "ab8ee9b99ebb4c73a4ab3c5b19818b80": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "7bd99a62de2a4649b888b04d6008bac0": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "f701f4abf9bc4f44b927708247536fe6": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "892715a3e09346269cc38cd228436e16": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "ad898fea706d4ff9933596bc75f70d8a": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}}
+</script>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="joedockrill/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Mumbling About Data Science</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/joedockrill" title="joedockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
