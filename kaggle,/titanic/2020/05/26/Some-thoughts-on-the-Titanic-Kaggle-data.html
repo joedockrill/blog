@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Some thoughts on the Titanic Kaggle data | Joe Dockrill</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Some thoughts on the Titanic Kaggle data" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle." />
+<meta property="og:description" content="So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle." />
+<link rel="canonical" href="https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html" />
+<meta property="og:site_name" content="Joe Dockrill" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-26T00:00:00-05:00" />
+<script type="application/ld+json">
+{"headline":"Some thoughts on the Titanic Kaggle data","description":"So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle.","datePublished":"2020-05-26T00:00:00-05:00","dateModified":"2020-05-26T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html"},"url":"https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Some thoughts on the Titanic Kaggle data | Joe Dockrill</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="Some thoughts on the Titanic Kaggle data" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle." />
+<meta property="og:description" content="So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle." />
+<link rel="canonical" href="https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html" />
+<meta property="og:site_name" content="Joe Dockrill" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-26T00:00:00-05:00" />
+<script type="application/ld+json">
+{"headline":"Some thoughts on the Titanic Kaggle data","description":"So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle.","datePublished":"2020-05-26T00:00:00-05:00","dateModified":"2020-05-26T00:00:00-05:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html"},"url":"https://joedockrill.github.io/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body>
+    <img src="/blog/images/web-header-wide.png"><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Home</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Some thoughts on the Titanic Kaggle data</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-26T00:00:00-05:00" itemprop="datePublished">
+        May 26, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#Kaggle,">Kaggle,</a>
+        &nbsp;
+      
+        <a class="category-tags-link" href="/blog/categories/#Titanic">Titanic</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+</ul><p>So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle.</p>
+
+<p>Some thoughts on the data so far before I download it and start playing:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Definition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PassengerId</td>
+      <td>ID</td>
+    </tr>
+    <tr>
+      <td>Survived</td>
+      <td>0 = No, 1 = Yes</td>
+    </tr>
+    <tr>
+      <td>Pclass</td>
+      <td>Ticket class, 1=1st, 2=2nd, 3=3rd</td>
+    </tr>
+    <tr>
+      <td>Name</td>
+      <td>Name</td>
+    </tr>
+    <tr>
+      <td>Sex</td>
+      <td>Sex</td>
+    </tr>
+    <tr>
+      <td>Age</td>
+      <td>Age in years</td>
+    </tr>
+    <tr>
+      <td>SibSp</td>
+      <td># of siblings / spouses aboard the Titanic</td>
+    </tr>
+    <tr>
+      <td>Parch</td>
+      <td># of parents / children aboard the Titanic</td>
+    </tr>
+    <tr>
+      <td>Ticket</td>
+      <td>Ticket number</td>
+    </tr>
+    <tr>
+      <td>Fare</td>
+      <td>Passenger fare</td>
+    </tr>
+    <tr>
+      <td>Cabin</td>
+      <td>Cabin number</td>
+    </tr>
+    <tr>
+      <td>Embarked</td>
+      <td>Port of Embarkation</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Name.</strong> <br>
+I see a lot of effort going standardising names and I don’t see the value. 
+Is someone known as Colonel as likely to survive as someone known as Mr? 
+Potentially it might be interesting to flag non-standard titles, eg: males NOT known as Mr or Master, 
+females not known as Miss Mrs Mlle, Mme etc, but not to fudge them all to Mr &amp; Mrs.</p>
+
+<p>FWIW the full list of titles seems to be:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>‘Mr’, ‘Master’, ‘Major’, ‘Rev’, ‘Dr’, ‘Col’, ‘Capt’, ‘Don’, ‘Jonkheer’
+‘Mrs’, ‘Miss’, ‘Dr’, ‘Ms’, ‘Mlle’, ‘Mme’, ‘Countess’
+</code></pre></div></div>
+<p>Note that Dr appears in both male and female titles</p>
+
+<p>The names in the data shown in brackets are maiden names as you would expect and this does not appear at first glance 
+to be useful.</p>
+
+<p>titanicfacts.net has a passenger list which indicates where certain passengers were employed by others 
+(eg: nanny/maid/manservant/nurse to other_passenger). This is interesting but doesn’t appear to be in our data, 
+at least from the sample rows I’m seeing so far. These account for 38 first class passengers and I assume that this 
+would be a significant factor if I can engineer it back out of the kaggle data.</p>
+
+<p><strong>SibSp/Parch.</strong> <br>
+Some people are using family size (SibSp + Parch) as an indicator. “Women and children first” surely took precedence 
+over family sizes and the notion of giving up your place for a family member. If this is a factor then I think it 
+needs treating carefully. One thing which is feasible is the idea that people with family members would have spent 
+time and effort of looking after each other, or even just looking for each other (although the latter probably not 
+a significant factor given the time of the accident; most families would probably have been in bed in their cabins). 
+Also Parch as one variable is absurd and needs splitting back to Parents and Children. Similarly (if possible) SibSp 
+to Siblings and Spouse although this is potentially more difficult for older passengers.</p>
+
+<p>We know that some children traveled only with a nanny, therefore parch=0 for them. Can I spot those nannies? 
+They must have been more likely to survive.</p>
+
+<p><strong>Ticket.</strong> <br>
+Some ticket numbers are prefixed PC and W.E.P. – what are these?</p>
+
+<p>There were 29 cross-channel passengers who disembarked in cherbourg (france) or queenstown (ireland). 
+I wonder if I can spot these through ticket numbers or other means? I doubt it but worth a look.</p>
+
+<p><strong>Age.</strong> <br>
+“If the age is estimated, is it in the form of xx.5”. Watch out for that and decide what to do with it. 
+Is there a point at which older passengers may have been more likely to give up their place on a lifeboat for 
+someone younger? How do survival rates by age look between sexes?</p>
+
+<p><strong>Fare.</strong> <br>
+This varies massively even within passenger classes. Must be useful. Can probably see which passengers had suites. 
+Some high value tickets also contain multiple cabin numbers which also suggests a certain level of affluence.</p>
+
+<p><strong>Cabin.</strong> <br>
+Cabin numbers (mostly not present) tell you the deck the cabin was on and this is probably interesting.</p>
+
+<p><strong>Embarked.</strong>
+Probably insignificant. If it’s a significant factor then I’d need to try and understand why.</p>
+
+<p><strong>Other.</strong> <br>
+One article I read uses squares and products of base variables as indicators and I don’t understand enough about this generally so it’s a tangent I need to go on shortly.</p>
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="joedockrill/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/kaggle,/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Mumbling About Data Science</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/joedockrill" title="joedockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
