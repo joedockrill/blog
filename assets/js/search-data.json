@@ -2,6 +2,17 @@
   
     
         "post0": {
+            "title": "Type hinting enum params from within a notebook",
+            "content": "Hi . What is that meant to look like? Can I not do something about that? .",
+            "url": "https://joedockrill.github.io/blog/misc/2020/08/03/Type-hinting-enum-params-within-a-notebook.html",
+            "relUrl": "/misc/2020/08/03/Type-hinting-enum-params-within-a-notebook.html",
+            "date": " • Aug 3, 2020"
+        }
+        
+    
+  
+    
+        ,"post1": {
             "title": "Collab filtering joke recommender",
             "content": "I’ve just finished a new demo project which is a fastai collaborative filtering model trained on the Jester dataset as a joke recommender system. . If you don’t know what a collab filtering model is for, it’s what powers the recommender systems you find on websites like Netflix or Amazon. It allows you to make predictions about how high or low someone will rate an item based on ratings they’ve already made, combined with ratings other users have made. . You can use a collab model to predict which items a user might like (and how much), or you can even start digging embedding matrices out of the model and use PCA to discover what parameters it’s figured out for you. . You can play with a working demo here, and the repo is here. .",
             "url": "https://joedockrill.github.io/blog/demo/2020/08/01/Collab-filtering-joke-recommender.html",
@@ -12,7 +23,7 @@
     
   
     
-        ,"post1": {
+        ,"post2": {
             "title": "Deploying demo projects to Heroku",
             "content": "So you’ve created a deep learning model and it can understand the difference between different breeds of dog or different Hemsworth brothers. Awesome. . Now what? There are various options for deploying some kind of working demo. . Some people want to put a lot of effort into very beautifully presented standards compliant ajax enabled websites and mobile apps. That’s fine, I’m not knocking it, but life is short and personally I just want somewhere I can upload my notebook so I can go “LOOK I MADE A THING AND IT’S REALLY COOL!!” . Heroku combined with Voila is perfect for me. Voila renders Jupyter notebooks as web pages and Heroku is a lovely free service which lets me just throw my notebooks at it. Heroku also scales as you grow so you can start free and work your way up if you want to host something serious on it. (You can also use Heroku for proper websites if you prefer, google away). . If you take a look at the repo for my demo site on Heroku, you’ll see: . Procfile – what to do when the heroku application starts | requirements.txt – modules you need | Some .ipynb notebooks | . Procfile – mine looks like this: . web: voila –port=$PORT –no-browser –enable_nbextensions=True . If you add notebook.ipynb to the end of that string then Voila will display that notebook when the app starts but you can only display that notebook and if you try to link to any others you’ll get an http error. I want to use this for multiple demos so I don’t specify a notebook, but if you go to the root of the app at joedockrill.herokuapp.com then you’ll be greeted with a rather unattractive list of files. . Hopefully you can tell from the rather unattractive list of files where I’m headed with this. I use default.ipynb as a homepage to list all the demos on the website; It just means having to explicitly link to joedockrill.herokuapp.com/voila/render/default.ipynb which isn’t the biggest pain in the world. . requirements.txt is for all the modules you need. do not do pip installs in your notebook. Heroku builds an image with everything you need once when you deploy, then just copies it onto a server when someone runs the app. . Once you have your repo in place you just need to . Create an account on Heroku | Connect it to your github | Choose the repo | Choose between automatic deploys when the repo changes or manual deploys when you press the button | . Two things to keep in mind. First, there is a maximum compiled “slug size” for your app image and it’s 500MB. If you intend to deploy multiple demos with large model files then keep the pickles on Google Drive or something similar and load them from there. You also need to make sure that you use the CPU versions of Pytorch because the GPU ones are massive by comparison. (See my requirements.txt file). . The other issue (related to the first) is that Voila runs all the code in your notebook before it renders that part of the UI. That’s an issue when you have to load a model export across the intertubes. You’ll see in the clown classifier that the markdown cell at the top displays right away so I waffle and talk about the demo and make excuses and hope that it’s rendered the rest of the UI by the time you finish reading. . I haven’t yet found a way around this and believe me I’ve tried. I even tried downloading the model from drive on a worker thread so my foreground would complete and render the UI before the download started. It works fine in Colab but Voila didn’t like it, and somehow still managed to wait until the background thread had completed before rendering anything. It was like trying to make VB5 behave itself with multi-threading APIs. I gave up. . Don’t get me wrong though, Voila and Heroku are both lovely and I highly recommend giving them a go. If there&#39;s a better option for a quick demo project, I haven&#39;t found it yet. .",
             "url": "https://joedockrill.github.io/blog/misc/2020/07/26/Deploying-demo-projects-to-heroku.html",
@@ -23,7 +34,7 @@
     
   
     
-        ,"post2": {
+        ,"post3": {
             "title": "Follow Friday: Ken Jee",
             "content": "Yes it’s Saturday and I’m really rubbish at remembering to do these at all, shhhh. . Ken Jee has a great YouTube channel with lots of helpful content for beginners, and he’s just got himself a Kaggle account too. You should check him out. .",
             "url": "https://joedockrill.github.io/blog/followfriday/2020/07/25/Follow-friday-ken-jee.html",
@@ -34,7 +45,7 @@
     
   
     
-        ,"post3": {
+        ,"post4": {
             "title": "Encoding tabular data as images",
             "content": "TL;DR. I’m in the top 9% on the Titanic leaderboard using a CNN. Yes rly. . I was playing with fastai.tabular (v1) the other day and I could not get it to be my friend. . All the time I could hear Jeremy’s voice in the back of my head saying “make things which aren’t pictures, into pictures”, so I had a quick look to see if there are any papers about encoding tabular data as images. I figured that must be A Thing people are doing. . I found a paper describing a method called SuperTML which is based off of something called Super Characters; both essentially involve putting your non-image data (text or number values) onto an image and then using a CNN to process them. . I mean, literally like that. File this under “so stupid there’s no way it should work”, but it actually does. . The first thing which occured to me though is that the model is going to understand the underlying values an awful lot quicker if I just use them as color codes or greyscale values. In my limited experimenting so far this seems to be the case, and at the moment I’m generating images which look like this. . The second thing which occured to me is that maybe I could feature engineer the data to death, throw everything including the kitchen sink into the images and have the model figure out which features mattered. That would have been so awesome. It did not work. . So far I’m finding simpler architectures are better for this. That’s not terribly surprising. It’s also very quick to train as there’s very little to figure out. . I managed to get top 9% on Titanic using ResNet-18 (again with fastai), with an accuracy of 0.79665. That’s a PB for me (although I was very wet behind the ears when I first tried this competition). As best I can tell, the real record for this competition (once you get past all the 1.0 idiots) was around .85 (anything above about 80% is ok) and it involved ensembling quite a few different models. I did 5 epochs at 1e-2 and then 5 at 1e-3. I didn’t even need to unfreeze, it’s basically looking at minecraft blocks. . If you want to play around with this, I’ve put the image encoder onto github. . github.com/joedockrill/DFToImageEncoder . The code is in the following cell. It&#39;s not complicated and there may be other directions this could go in, other information which could be encoded into the images. Drop a comment or have a play with it if you can think of anything. . #collapse-hide from PIL import Image as PImage from PIL import ImageDraw as PImageDraw import numpy as np from math import sqrt, ceil from sklearn import preprocessing class DFToImageEncoder(): def __init__(self): self.__scaler = None self.__encoders = None self.__data = None self.__mms_data = None self.__exclude_cols = None @property def data(self): return self.__data @data.setter def data(self, df): self.__data = df self.__mms_data = df.copy(); mms = self.__mms_data; # drop excluded cols if(self.__exclude_cols is not None): mms.drop(self.__exclude_cols, axis=1, inplace=True) # fit if we haven&#39;t already if(self.__scaler is None): self.fit(mms) # label encode any cat cols and scale from 0-255 if(self.__encoders is not None): for col,enc in self.__encoders.items(): mms[col] = enc.transform(mms[col]) mms[mms.columns] = self.__scaler.transform(mms[mms.columns]) @property def exclude_cols(self): return self.__exclude_cols @exclude_cols.setter def exclude_cols(self, cols): # cols to exclude from the image (like your target) self.__exclude_cols = cols if(self.data is not None): self.data = self.data def fit(self, df): # fit to all your data then process train/val/test by changing .data df = df.copy() if(self.__exclude_cols is not None): df.drop(self.__exclude_cols, axis=1, inplace=True) for col in df.columns: if df[col].dtype == np.object: if(self.__encoders is None): self.__encoders = {} enc = preprocessing.LabelEncoder().fit(df[col]) self.__encoders[col] = enc df[col] = enc.transform(df[col]) # have to actually tfm here or the scaler can&#39;t fit self.__scaler = preprocessing.MinMaxScaler(feature_range=(0, 255)) self.__scaler.fit(df) def iterrows(self): # index and row from the original df + generated image for index, row in self.__data.iterrows(): img = self.create_image(self.__mms_data.loc[index].values) yield index, row, img @staticmethod def create_image(vals): # you can call this directly with an array of 0-255 values (floats or ints, i don&#39;t care) img_size = 200 mtx_size = ceil(sqrt(len(vals))) div_size = img_size // mtx_size img = PImage.new(&quot;L&quot;, (img_size, img_size)) drw = PImageDraw.Draw(img) i = 0 for y in range(0, mtx_size): for x in range(0, mtx_size): x0 = x*div_size; x1 = x0 + div_size y0 = y*div_size; y1 = y0 + div_size if i &lt; len(vals): drw.rectangle([x0,y0,x1,y1], fill=(int(vals[i]))) else: drw.line((x0+5,y0+5,x1-5,y1-5), fill=128, width=5) drw.line((x0+5,y1-5,x1-5,y0+5), fill=128, width=5) i += 1 for i in range(1, mtx_size): drw.line((i*div_size,0, i*div_size,img_size), fill=0) drw.line((0,i*div_size, img_size,i*div_size), fill=0) return img @staticmethod def fastai_img(img): # for getting preds directly from a fastai model from fastai.vision.image import Image import torchvision.transforms as tfms img_tensor = tfms.ToTensor()(img) return Image(img_tensor) . . You use it like this: . # setup enc = DFToImageEncoder() enc.exclude_cols = [&quot;PassengerId&quot;, &quot;Survived&quot;] enc.fit(df_all) # fit to ALL the data # create training images saved to disc enc.data = df_train for index, row, img in enc.iterrows(): # exclude_cols are still returned for you to inspect if row.Survived == True: path = &quot;images/Survived/&quot; else: path = &quot;images/Died/&quot; img.save(path + str(row.PassengerId) + &quot;.jpg&quot;) # train your model... train_model() # get predictions, use in memory images directly enc.data = df_test # switch to test data for index, row, img in enc.iterrows(): # helper function to convert to a fastai image fast_img = DFToImageEncoder.fastai_img(img) pred,_,_ = learn.predict(fast_img) .",
             "url": "https://joedockrill.github.io/blog/kaggle/titanic/dl/tools/2020/07/25/Encoding-tabular-data-as-images.html",
@@ -45,7 +56,7 @@
     
   
     
-        ,"post4": {
+        ,"post5": {
             "title": "Jeremy Howard is a rock star",
             "content": "&quot;If you can’t explain it simply, you don’t understand it well enough.&quot; . Albert Einstein . &nbsp; . &quot;Neural nets are black boxes which work by magic and it’s all very complicated and you don’t need to understand what happens inside them.&quot; . Everyone else . &nbsp; . &quot;Hold my beer. I’m going to show you how to create a neural net in excel.&quot; . Jeremy Howard . I’m not kidding by the way. Lesson 4 and 5 of the fast.ai MOOC has a simple 1 layer NN for colab filtering running in MS Excel. This course is so good… .",
             "url": "https://joedockrill.github.io/blog/misc/2020/07/18/Jeremy-Howard-is-a-rock-star.html",
@@ -56,7 +67,7 @@
     
   
     
-        ,"post5": {
+        ,"post6": {
             "title": "Clown classification with Fastai",
             "content": "Lesson 2 of the fastai course done and I’ve created a model for classifying photos of clowns into nice or scary. . You can go and play with it on Heroku. It takes a few seconds to load up. .",
             "url": "https://joedockrill.github.io/blog/dl/demos/2020/07/14/Clown-classification-with-fastai.html",
@@ -67,7 +78,7 @@
     
   
     
-        ,"post6": {
+        ,"post7": {
             "title": "Image scraping DuckDuckGo and Google",
             "content": "I’ve written a notebook for scraping images from DuckDuckGo and Google for the purpose of creating DL datasets. . You download images by labels like so: . ZIP_NAME = &quot;pets.zip&quot; duckduckgo_search(&quot;Dogs&quot;, &quot;dogs puppies&quot;, max_results=20) duckduckgo_search(&quot;Cats&quot;, &quot;cats kittens&quot;, max_results=20) duckduckgo_search(&quot;Birds&quot;, &quot;parrots budgies cockatoos&quot;, max_results=20) . You can constrain DDG searches as follows: . duckduckgo_search(label: str, keywords: str, max_results: int=100, img_size: ImgSize=ImgSize.Thumbs, img_type: ImgType=ImgType.Photo, img_layout: ImgLayout=ImgLayout.Square, img_color: ImgColor=ImgColor.All) -&gt; None: img_size can be one of the following: (default=ImgSize.Thumbs) Thumbs, Small, Medium, Large, Wallpaper img_type can be one of the following: (default=ImgType.Photo) All, Photo, Clipart, Gif, Transparent img_layout can be one of the following: (default=ImgLayout.Square) All, Square, Tall, Wide img_color can be one of the following: (default = ImgColor.All) All, Color, Monochrome, Red, Orange, Yellow, Green, Blue, Purple, Pink, Brown, Black, Gray, Teal, White . Then you can run an image cleaner inside the notebook to get rid of anything which doesn&#39;t belong. . After that you zip it all up, an either download it or transfer it to your Google Drive. . You can also distribute CSV files with URL/label pairs if you want a massive dataset and a small distributable, and have people download the images themselves. . You can find it here: github.com/joedockrill/image-scraper .",
             "url": "https://joedockrill.github.io/blog/dl/2020/07/13/Image-scraping-duckduckgo-and-google.html",
@@ -78,7 +89,7 @@
     
   
     
-        ,"post7": {
+        ,"post8": {
             "title": "Matrix multiplication",
             "content": "One thing you need to understand as you start getting into ML and DL, is matrix multiplication, and it’s something the bootcamp course I took could perhaps have explained better. To be completely honest I don&#39;t remember the last time I saw something so simple get over-complicated so much. . matrixmultiplication.xyz is brilliant, and I wish I’d have been pointed at it at the time. Sometimes a picture an animation is worth a thousand words. .",
             "url": "https://joedockrill.github.io/blog/misc/2020/07/12/Matrix-multiplication.html",
@@ -89,7 +100,7 @@
     
   
     
-        ,"post8": {
+        ,"post9": {
             "title": "Parameter types and property encapsulation in Python",
             "content": "I just discovered a couple of cool new Python things that I don’t understand why people aren’t using. . It turns out that you can do this: . def test(name:str, age:int): pass . But don’t get too excited because the runtime will still let people pass in anything they want so you still need to type check and throw exceptions yourself where appropriate. It’s useful for self-documenting your code, but still…really?? . class Person: def __init__(self, name): self.name = name @property def name(self): return self.__name @name.setter def name(self, var): self.__name = var . Property encapsulation! I’m very happy about this. . If you’re new to programming this is great because it allows you to hide how you store something within your class (which means you can change it later without breaking code all over the place) and more importantly, allows you to insert validation and business rules. Eg: you can make sure person.age can’t be set to a negative number, or check the new product you’re trying to add to this customer isn’t incompatible with anything they already have. . Yes I know i can do the same thing with person.get_name() and person.set_name(&quot;&quot;) but I’m old and set in my ways and I think it’s butt-ugly. Sue me. .",
             "url": "https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html",
@@ -100,7 +111,7 @@
     
   
     
-        ,"post9": {
+        ,"post10": {
             "title": "Loading DataFrames and modules straight from Google Drive",
             "content": "Noob tip of the day. I love Colab. I use it for everything. . Up until now I’ve been keeping my data on Google Drive and loading it by mapping my drive at the top of the notebook, like this. . from google.colab import drive drive.mount(&quot;/content/drive&quot;) df = pd.read_csv(&quot;/content/drive/My Drive/Python/Data/Titanic/train.csv&quot;) . That’s ok except that every time you run the notebook you have to click a link the first time it does the drive.mount() and go get an auth token to paste back into the notebook cell. It also means nobody else can run this notebook as they’d have to be able to log into my Google account to get at the data. . I’ve (only) just discovered that read_csv() can load a file straight from a url, so you can load your data from Google Drive like this. . Get a sharing link for your file in Drive that everyone can read. It’ll look like this: . https://drive.google.com/file/d/1gSVUZhh8w-GbJz9yaJVfSv_XmOBPncXPr/view?usp=sharing . Remove the file id and add it to this url instead: . https://drive.google.com/uc?export=download&amp;id=1gSVUZhh8w-GbJz9yaJVfSv_XmOBPncXPr . You can also find Google Drive sharing-&gt;download link converters where you can cut &amp; paste your link in. Then you can simply: . import pandas as pd url = &quot;https://drive.google.com/uc?export=download&amp;id=1gSVUZhh8w-GbJz9yaJVfSv_XmOBPncXPr&quot; df = pd.read_csv(url) . If you have custom modules stored on drive you can load them in a very similar way. . from urllib.request import urlretrieve import os def download(url, file): if not os.path.isfile(file): print(&quot;Downloading file:&quot;, file) urlretrieve(url, file) print(&quot;Done&quot;) url_module = &quot;https://drive.google.com/uc?export=download&amp;id=1KJeTUhMF6hbw1nGbWop5_atYInatLl2k&quot; download(url_module, &quot;your_module.py&quot;) import your_module as lolorcopters .",
             "url": "https://joedockrill.github.io/blog/tipoftheday/2020/06/27/Loading-DataFrames-and-modules-straight-from-Google-Drive.html",
@@ -111,7 +122,7 @@
     
   
     
-        ,"post10": {
+        ,"post11": {
             "title": "Follow Friday: StatQuest with Josh Starmer",
             "content": "I don’t know if Follow Friday is still a thing. It used to be a thing in the blogiverse anyway, and if doesn’t exist any more then it should. . One recommendation every Friday of someone or something that I think you should be following. . Today it’s StatQuest with Josh Starmer on YouTube. His explanations are by far the easiest to follow I’ve ever come across, even on some quite complicated topics. He avoids formulas and jargon as much as possible and has literally only managed to confuse me once. (In his defense it was a video about a kernel function which exists in infinite dimensions). .",
             "url": "https://joedockrill.github.io/blog/followfriday/2020/06/26/Follow-Friday-StatQuest.html",
@@ -122,7 +133,7 @@
     
   
     
-        ,"post11": {
+        ,"post12": {
             "title": "Titanic phase 2",
             "content": "I’ve finished my Data Science Bootcamp course and I’m a bit more free to focus on whatever I want now, so I’m going to take one more crack at the Titanic problem on Kaggle. . Now I know a bit more than I did the first time around, I can do a slightly better job at data cleaning and feature engineering, but mainly I thought I’d try something technically known as “not throwing random models I don’t understand properly at the data”. . It’s something I think most beginners in the Titanic competition go through. After trying a basic logistic regression, we discover a mass of different classifier types we didn’t know existed so we try a bunch from other peoples notebooks (only most of them have also cut &amp; pasted from other places without understanding them either). . I’m going to go and sit in the corner now and learn properly about how the different types of model work (hence why I was learning about the monkeys inside the random forest). . Then I’m going to try the ones which actually make some sense, then I’m going to have a good crack at a TensorFlow, and then I’m going to get on with something else. . See you in a bit… .",
             "url": "https://joedockrill.github.io/blog/kaggle/titanic/2020/06/24/Titanic-phase-2.html",
@@ -133,7 +144,7 @@
     
   
     
-        ,"post12": {
+        ,"post13": {
             "title": "Tableau rocks",
             "content": "I’m not the worlds biggest fan of all singing and dancing viz dashboards, but the fact is that there are going to be times when they are useful, and at some point you are probably going to work under important people who love visualizations. . I’m very impressed with Tableau. To be honest, when you’ve been around for as long as I have, you get used to be various bits of software like this being market leaders in their little niches because they’re the least dreadful option at what they do. That was depressingly normal for a long time although I’m glad to say it’s getting much rarer. . Still it’s so nice to find something which just works the way it should (and all the more surprising to find that Google has a rival product which is actually really bad!). . Below is a mickey-mouse hello world viz which literally takes about 2 mins to produce but it gives you an idea of the kind of thing you can produce and the way people can interact with them. . If you’re new and you’ve never seen Tableau you can go and download the free version here. . .",
             "url": "https://joedockrill.github.io/blog/misc/2020/06/24/Tableau-rocks.html",
@@ -144,7 +155,7 @@
     
   
     
-        ,"post13": {
+        ,"post14": {
             "title": "Random forest classifiers",
             "content": "I’m just learning about how random forests work under the hood. They get quite clever the further you get into it, but the basic premise is still 1000 monkeys on 1000 broken typewriters… :laughing: . It&#39;s amazing sometimes what works anyway. .",
             "url": "https://joedockrill.github.io/blog/misc/2020/06/24/Random-forest-classifiers.html",
@@ -155,7 +166,7 @@
     
   
     
-        ,"post14": {
+        ,"post15": {
             "title": "Amazon logistics is amazing",
             "content": "I placed an order. They said it would be delivered on Sunday. Then I got a series of messages telling me my order had been split up and dispatched separately so bits of it got to me faster. Then they delivered all 5 parcels to me on the same day. In 3 different vans. .",
             "url": "https://joedockrill.github.io/blog/misc/2020/06/20/Amazon-logistics-is-amazing.html",
@@ -166,7 +177,7 @@
     
   
     
-        ,"post15": {
+        ,"post16": {
             "title": "Diff two DataFrames",
             "content": "I was just tracking down a bug (it turns out that Python’s datetime handling is a lot of fun) and I came across a very cute bit of code for dumping out the differences between two dataframes. . You’re welcome. . def DiffDataFrames(df1, df2): ne_stacked = (df1 != df2).stack() changed = ne_stacked[ne_stacked] changed.index.names = [&#39;ID&#39;, &#39;Column&#39;] difference_locations = np.where(df1 != df2) changed_from = df1.values[difference_locations] changed_to = df2.values[difference_locations] diff = pd.DataFrame({&#39;DF1&#39;: changed_from, &#39;DF2&#39;: changed_to}, index=changed.index) return diff .",
             "url": "https://joedockrill.github.io/blog/misc/2020/06/19/Diff-two-dataframes.html",
@@ -177,7 +188,7 @@
     
   
     
-        ,"post16": {
+        ,"post17": {
             "title": "First attempt at Titanic: 75%",
             "content": "I’ve finished my first attempt at the titanic survivors competition on kaggle and I scored 75%. . My disappointment (unlike my accuracy), is immeasurable. . I did manage a score of 77% in the beginning but I realised that I was doing some ugly stuff which should never see the light of day so now I have a score of 75 i can actually trust. . I’ll go back to this later and see what I can do with it but I really need to get on with the rest of my course now. . If you’re interested, the notebook is here. .",
             "url": "https://joedockrill.github.io/blog/kaggle/titanic/2020/06/09/First-attempt-at-titanic-75.html",
@@ -188,7 +199,7 @@
     
   
     
-        ,"post17": {
+        ,"post18": {
             "title": "Plotting with pairgrids",
             "content": "I’m just sorting out some of my plotting code into a reusable module and I’ve just discovered how cool pairgrids are. Between Matplotlib and Seaborn there isn’t much you can’t do but there’s so much of it that for Python beginners like me it can take some time to discover it all. . For initial data exploration, facetgrids are very useful. We make some kind of x,y plot like money_spent/time_of_day but then split it by some other facet like day_of_week to give us 7 plots instead of one. I used them in my initial titanic exploration to split by passenger class. . g = sns.FacetGrid(data=df, col=&quot;Pclass&quot;) g.map(sns.distplot, &quot;Survived&quot;, kde=False, bins=[0,1,2]) . Pairgrids allow us to choose a variable of interest (like Survived) and plot it against all the other variables at once. This very quickly allows us to see the relationships in the data, and the way I’ve carved up the data so far, it allows us to see that there are very different relationships between certain variables depending on who (or rather what) you are. . Children with a large number of siblings don’t do well. Women start to do badly as their family size increases, but for men it doesn’t make that much difference. This is already pointing us towards some of the interactions we’re going to need to add to our model. . def LogisticPairPlot(df, y, exclude_cols=None): values = df.columns.tolist() values.remove(y) for col in df.columns: #drop non-numeric cols if np.issubdtype(df.dtypes[df.columns.get_loc(col)], np.number) == False: values.remove(col) if exclude_cols is not None: for col in exclude_cols: values.remove(col) g = sns.PairGrid(df, y_vars=y, x_vars=values) g.map(sns.regplot, logistic=True, ci=None) LogisticPairPlot(df, &quot;Survived&quot;, [&quot;PassengerId&quot;]) .",
             "url": "https://joedockrill.github.io/blog/misc/2020/06/02/Plotting-with-pairgrids.html",
@@ -199,7 +210,7 @@
     
   
     
-        ,"post18": {
+        ,"post19": {
             "title": "A quick note on regular expressions",
             "content": "In the last post I included a code snippet which uses a regular expression to extract the title from a name in the titanic data. . It just occurred to me that a lot of the people reading the blogs of beginner data scientists, if they aren’t hiring managers (Hi, I love you!), are probably also beginner data scientists, and in a lot of cases, probably quite new to programming. Regular expression patterns (sometimes known as regex) are something you should know about. . Regular expressions can do quite complicated text pattern matching which would often take some quite cumbersome code otherwise. They take a bit of learning and getting used to but I’ll give you the briefest introduction so you can at least understand why it’s worth the effort to learn. . If you’ve already written something similar using string indexing functions, you’re not going to take long to convince. . The names in the titanic data look like these: . Name . Braund, Mr. Owen Harris | . Cumings, Mrs. John Bradley (Florence Briggs Th… | . Heikkinen, Miss. Laina | . Futrelle, Mrs. Jacques Heath (Lily May Peel) | . Allen, Mr. William Henry | . The regular expression I started using to process them was this: [^,]*, s([^.]*) which breaks down into 3 sections, explained with the example “Braund, Mr. Owen Harris”. . RegEx Matches Text . [^,]* | Anything except a comma, multiple times “Braund” | . , s | A comma followed by a space “, “ | . ([^.]*) | Anything except a period, multiple times “Mr” | . The brackets around the third part mean that it is a match group, which we can use to extract the actual value in our code. If I’d wanted to know the surname as well (maybe to turn the name into “Mr Braund”) I could have placed brackets around the first part and the third part of the pattern and extracted them both. . This pattern needed a slight tweak as it failed on one name in the training data. “Rothes, the Countess. of (Lucy Noel Martha Dye…”. This was returning “the Countess” in the match group instead of “Countess”. . The new pattern is [^,]*, s(the s)?([^.]*). A question mark in a regex means zero or one times and the match object returns None when the pattern doesn’t find the optional “the ” in the name. I ignore it anyway and return the second match group which contains the title I’m after. . import re def ExtractTitle(name): ptn = &quot;[^,]*, s(the s)?([^ .]*)&quot; p = re.compile(ptn, re.IGNORECASE) m = p.match(name) if m is not None: return m.group(2) else: print(&quot;FAILED EXTRACTING TITLE FROM: &quot; + name) return None . You should at least now understand how powerful regex patterns can be, and this is probably one of the simplest examples you’re likely to find. If you think about something even a tiny bit more complicated like an email address and the many different ways they can appear, if you try extracting them from larger blocks of text using string indexing functions, you’re going to have a migraine quite quickly. . Luckily, regular expressions have been around since 1951 and appear in some form in most programming languages, even if you have to download a third-party library. Python has a built-in package for them so you just need to import re. . Lastly the web is full of websites which teach you regular expressions and help you build them. RegExr has a great visual editor which lets you edit the pattern with test text underneath so you can see in real time what your changes are doing. There are plenty more like this. Go and play… .",
             "url": "https://joedockrill.github.io/blog/misc/2020/06/01/A-quick-note-on-regular-expressions.html",
@@ -210,7 +221,7 @@
     
   
     
-        ,"post19": {
+        ,"post20": {
             "title": "Titanic data cleaning and initial exploration",
             "content": "I should really be cracking on with my data science course but I’ve gone on a tangent to play with the Titanic data. . So far I have: . Engineered out a Title column from the names. . This is easy enough with a regular expression. . import re def ExtractTitle(name): p = re.compile(&quot;[^,]*, s(the s)?([^ .]*)&quot;, re.IGNORECASE) m = p.match(name) assert m, &quot;Failed to extract title&quot; return m.group(2) ExtractTitle(&quot;Braund, Mr. Owen Harris&quot;) . &#39;Mr&#39; . Added a Noble flag. . This is for nobility titles like Sir, Countess, Lord, Lady etc. There actually aren’t as many of these in the train data as I expected, if there aren’t more in test then this flag may not be that helpful. . Added SexPlus column. . This is to expand male/female to man/woman/boy/girl. I expect this to be a useful feature as children were obviously not treated in the same way as adults (but I expect that boys were not treated equally to girls). . I’ve chosen 16 as the cut-off point. Legally people were considered completely independent of their parents at 21 at this time, but there were a myriad of points at which children started progressing towards adulthood in different ways. . All I’m interested in is how they were treated in regards to places on lifeboats, and the information from historical accounts suggests that was somewhere around 14-16 but was not clearly defined. . Dealt with missing ages. . 20% of the data does not have an age set. So far I have used median ages based on Title. That’s good enough for men, boys, and married women, but for other females I should be able to look at Parch and SibSp and take a more educated guess at whether they are girls or single women. . Plotting. . After that I did some basic plotting to look at survival rates. . Unsurprisingly women and children did better than men, but within children, girls did better than boys. . There’s nothing especially stunning jumping out at this point. . Next I ran some regression plots to look at survival rates by age on a line. . There is obviously at least one outlier in the male data which may be causing an issue and I need to look at trimming here. Boys and girls needs further attention, possibly by Pclass. . The next things I need to investigate are: . Cabin number. I can get the deck from cabin number but I’m not sure what else, and so few of these are present that I don’t expect it to be much use. | Family groups. I need to look at Parch, SibSp, ticket numbers, cabin numbers etc and try to determine the groups travelling together, and add a column for GroupSize(?) | Ticket numbers. This may be useful as part of family processing but I’m not sure what else I can gather from these. | Fare. The size of the fare may be useful as fare can vary a lot even within Pclass (a 1st class berth was £30 but there were 2 suites going for £870 and presumably a fair bit in the middle). This needs to be in conjunction with trying to calculate a fare per person as some tickets prices appear to be a sum for everyone in that group. | Look at which interactions I want to add. I expect most of the value I’m going to add from this point to come from here. | .",
             "url": "https://joedockrill.github.io/blog/kaggle/titanic/2020/05/31/Titanic-data-cleaning-and-initial-exploration.html",
@@ -221,7 +232,7 @@
     
   
     
-        ,"post20": {
+        ,"post21": {
             "title": "Some thoughts on the Kaggle Titanic data",
             "content": "So it seems the data science equivalent of “Hello World” is the Titanic survivor problem on Kaggle. . Some thoughts on the data so far before I download it and start playing: . Variable Definition . PassengerId | ID | . Survived | 0 = No, 1 = Yes | . Pclass | Ticket class, 1=1st, 2=2nd, 3=3rd | . Name | Name | . Sex | Sex | . Age | Age in years | . SibSp | # of siblings / spouses aboard the Titanic | . Parch | # of parents / children aboard the Titanic | . Ticket | Ticket number | . Fare | Passenger fare | . Cabin | Cabin number | . Embarked | Port of Embarkation | . Name. . I see a lot of effort going standardising names and I don’t see the value. Is someone known as Colonel as likely to survive as someone known as Mr? Potentially it might be interesting to flag non-standard titles, eg: males NOT known as Mr or Master, females not known as Miss Mrs Mlle, Mme etc, but not to fudge them all to Mr &amp; Mrs. . FWIW the full list of titles seems to be: . ‘Mr’, ‘Master’, ‘Major’, ‘Rev’, ‘Dr’, ‘Col’, ‘Capt’, ‘Don’, ‘Jonkheer’ ‘Mrs’, ‘Miss’, ‘Dr’, ‘Ms’, ‘Mlle’, ‘Mme’, ‘Countess’ . Note that Dr appears in both male and female titles . The names in the data shown in brackets are maiden names as you would expect and this does not appear at first glance to be useful. . titanicfacts.net has a passenger list which indicates where certain passengers were employed by others (eg: nanny/maid/manservant/nurse to other_passenger). This is interesting but doesn’t appear to be in our data, at least from the sample rows I’m seeing so far. These account for 38 first class passengers and I assume that this would be a significant factor if I can engineer it back out of the kaggle data. . SibSp/Parch. . Some people are using family size (SibSp + Parch) as an indicator. “Women and children first” surely took precedence over family sizes and the notion of giving up your place for a family member. If this is a factor then I think it needs treating carefully. One thing which is feasible is the idea that people with family members would have spent time and effort of looking after each other, or even just looking for each other (although the latter probably not a significant factor given the time of the accident; most families would probably have been in bed in their cabins). . Also Parch as one variable is absurd and needs splitting back to Parents and Children. Similarly (if possible) SibSp to Siblings and Spouse although this is potentially more difficult for older passengers. . We know that some children traveled only with a nanny, therefore parch=0 for them. Can I spot those nannies? They must have been more likely to survive. . Ticket. . Some ticket numbers are prefixed PC and W.E.P. – what are these? . There were 29 cross-channel passengers who disembarked in cherbourg (france) or queenstown (ireland). I wonder if I can spot these through ticket numbers or other means? I doubt it but worth a look. . Age. . “If the age is estimated, is it in the form of xx.5”. Watch out for that and decide what to do with it. Is there a point at which older passengers may have been more likely to give up their place on a lifeboat for someone younger? How do survival rates by age look between sexes? . Fare. . This varies massively even within passenger classes. Must be useful. Can probably see which passengers had suites. Some high value tickets also contain multiple cabin numbers which also suggests a certain level of affluence. . Cabin. . Cabin numbers (mostly not present) tell you the deck the cabin was on and this is probably interesting. . Embarked. . Probably insignificant. If it’s a significant factor then I’d need to try and understand why. . Other. . One article I read uses squares and products of base variables as indicators and I don’t understand enough about this generally so it’s a tangent I need to go on shortly. .",
             "url": "https://joedockrill.github.io/blog/kaggle/titanic/2020/05/26/Some-thoughts-on-the-Titanic-Kaggle-data.html",
@@ -232,7 +243,7 @@
     
   
     
-        ,"post21": {
+        ,"post22": {
             "title": "Hello World",
             "content": "Here we go again. .",
             "url": "https://joedockrill.github.io/blog/2020/05/26/Hello-World.html",
