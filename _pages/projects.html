@@ -9,5 +9,5 @@ search_exclude: true
 {% assign posts = site.posts | where_exp: "post", "post.category == 'Projects'" %}
 
 {% for post in posts %}
-    <a href="{{ post.url }}">{{ post.title }}</a>
+    <a href="{{ post.url }}">{{ post.title }}</a></br>
 {% endfor %}
