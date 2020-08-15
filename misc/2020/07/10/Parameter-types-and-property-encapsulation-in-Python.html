@@ -7,6 +7,7 @@
 <title>Parameter types and property encapsulation in Python | Joe Dockrill</title>
 <meta name="generator" content="Jekyll v4.0.0" />
 <meta property="og:title" content="Parameter types and property encapsulation in Python" />
+<meta name="author" content="Joe Dockrill" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Cool Python things which people should be using" />
 <meta property="og:description" content="Cool Python things which people should be using" />
@@ -16,12 +17,19 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-10T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Cool Python things which people should be using","@type":"BlogPosting","headline":"Parameter types and property encapsulation in Python","url":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html","datePublished":"2020-07-10T00:00:00-05:00","dateModified":"2020-07-10T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"Cool Python things which people should be using","@type":"BlogPosting","headline":"Parameter types and property encapsulation in Python","url":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html","datePublished":"2020-07-10T00:00:00-05:00","dateModified":"2020-07-10T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
-<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-175488888-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
 <title>Parameter types and property encapsulation in Python | Joe Dockrill</title>
 <meta name="generator" content="Jekyll v4.0.0" />
 <meta property="og:title" content="Parameter types and property encapsulation in Python" />
+<meta name="author" content="Joe Dockrill" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Cool Python things which people should be using" />
 <meta property="og:description" content="Cool Python things which people should be using" />
@@ -31,11 +39,17 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2020-07-10T00:00:00-05:00" />
 <script type="application/ld+json">
-{"description":"Cool Python things which people should be using","@type":"BlogPosting","headline":"Parameter types and property encapsulation in Python","url":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html","datePublished":"2020-07-10T00:00:00-05:00","dateModified":"2020-07-10T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"Cool Python things which people should be using","@type":"BlogPosting","headline":"Parameter types and property encapsulation in Python","url":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html","datePublished":"2020-07-10T00:00:00-05:00","dateModified":"2020-07-10T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/misc/2020/07/10/Parameter-types-and-property-encapsulation-in-Python.html"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
-<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-175488888-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
 
 <script>
 function wrap_img(fn) {
@@ -245,13 +259,17 @@ window.onload = wrap_img;
             </svg><span>Subscribe</span>
           </a>
         </p>
+        <ul class="contact-list">
+          <li class="p-name">Joe Dockrill</li>
+          <li><a class="u-email" href="mailto:joedockrill@gmail.com">joedockrill@gmail.com</a></li>
+        </ul>
       </div>
       <div class="footer-col">
         <p>Mumbling About Data Science</p>
       </div>
     </div>
 
-    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/joedockrill" title="joedockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li></ul>
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/joedockrill" title="joedockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/joe-dockrill" title="joe-dockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
 </div>
 
   </div>
