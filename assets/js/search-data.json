@@ -92,8 +92,8 @@
         ,"post8": {
             "title": "Clown classification with Fastai",
             "content": "Lesson 2 of the fastai course done and I’ve created a model for classifying photos of clowns into nice or scary. . You can go and play with it on Heroku. It takes a few seconds to load up. .",
-            "url": "https://joedockrill.github.io/blog/dl/demos/projects/2020/07/14/Clown-classification-with-fastai.html",
-            "relUrl": "/dl/demos/projects/2020/07/14/Clown-classification-with-fastai.html",
+            "url": "https://joedockrill.github.io/blog/projects/clownclassifier/",
+            "relUrl": "/projects/clownclassifier/",
             "date": " • Jul 14, 2020"
         }
         
