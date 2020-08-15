@@ -167,6 +167,8 @@ window.onload = wrap_img;
 <p>I’ve just finished a new demo project which is a fastai collaborative filtering model trained on the <a href="http://eigentaste.berkeley.edu/dataset/">Jester dataset</a> as a joke recommender system.</p>
 <p>If you don’t know what a collab filtering model is for, it’s what powers the recommender systems you find on websites like Netflix or Amazon. It allows you to make predictions about how high or low someone will rate an item based on ratings they’ve already made, combined with ratings other users have made.</p>
 <p>You can use a collab model to predict which items a user might like (and how much), or you can even start digging embedding matrices out of the model and use PCA to discover what parameters it’s figured out for you.</p>
+<p>For this particular demo, the system cold-starts by asking you to rate 5 of the marginally more contentious jokes from the densest part of the ratings matrix.</p>
+<p>Then it gets around the non-existent user problem by calculating euclidean distances to known users and posing as the nearest real user. Sklearn’s euclidean_distances() isn’t the most accurate (by their own admission) but it is computationally cheap and more than good enough for this particular problem.</p>
 <p>You can play with a working demo <a href="https://joedockrill.herokuapp.com/voila/render/JesterCollabDemo.ipynb">here</a>, and the repo is <a href="https://github.com/joedockrill/jester-collab-filtering">here</a>.</p>
 
 </div>
