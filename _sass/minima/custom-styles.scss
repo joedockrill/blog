@@ -6,7 +6,11 @@
 
 /*-----------------------------------*/
 /*----- ADD YOUR STYLES BELOW -------*/
-site-header {background-color: #92A2BA;}
+site-header.div
+{
+  background-color: #92A2BA;
+  font-weight: bold;
+}
 
 // If you want to turn off dark background for syntax highlighting, comment or delete the below line.
 @import "minima/fastpages-dracula-highlight"; 
