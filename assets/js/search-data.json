@@ -37,8 +37,8 @@
         ,"post3": {
             "title": "Collab filtering joke recommender",
             "content": "I’ve just finished a new demo project which is a fastai collaborative filtering model trained on the Jester dataset as a joke recommender system. . If you don’t know what a collab filtering model is for, it’s what powers the recommender systems you find on websites like Netflix or Amazon. It allows you to make predictions about how high or low someone will rate an item based on ratings they’ve already made, combined with ratings other users have made. . You can use a collab model to predict which items a user might like (and how much), or you can even start digging embedding matrices out of the model and use PCA to discover what parameters it’s figured out for you. . You can play with a working demo here, and the repo is here. .",
-            "url": "https://joedockrill.github.io/blog/demos/2020/08/01/Collab-filtering-joke-recommender.html",
-            "relUrl": "/demos/2020/08/01/Collab-filtering-joke-recommender.html",
+            "url": "https://joedockrill.github.io/blog/demos/projects/2020/08/01/Collab-filtering-joke-recommender.html",
+            "relUrl": "/demos/projects/2020/08/01/Collab-filtering-joke-recommender.html",
             "date": " • Aug 1, 2020"
         }
         
