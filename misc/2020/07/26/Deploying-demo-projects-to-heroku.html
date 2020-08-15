@@ -157,8 +157,9 @@ window.onload = wrap_img;
 <li>requirements.txt – modules you need</li>
 <li>Some .ipynb notebooks</li>
 </ul>
-<p><strong>Procfile</strong> – mine looks like this: \
-<code>web: voila –port=$PORT –no-browser –enable_nbextensions=True</code></p>
+<p><strong>Procfile</strong> – mine looks like this:</p>
+
+<pre><code>web: voila –port=$PORT –no-browser –enable_nbextensions=True</code></pre>
 <p>If you add notebook.ipynb to the end of that string then Voila will display that notebook when the app starts <strong>but</strong> you can <em>only</em> display that notebook and if you try to link to any others you’ll get an http error. I want to use this for multiple demos so I don’t specify a notebook, but if you go to the root of the app at <a href="https://joedockrill.herokuapp.com/">joedockrill.herokuapp.com</a> then you’ll be greeted with a rather unattractive list of files.</p>
 
 </div>
