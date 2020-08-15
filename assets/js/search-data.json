@@ -291,6 +291,25 @@
   
 
   
+      ,"page2": {
+          "title": "",
+          "content": ". layout: home search_exclude: true image: images/logo.png title: Posts – .",
+          "url": "https://joedockrill.github.io/blog/",
+          "relUrl": "/",
+          "date": ""
+      }
+      
+  
+
+  
+
+  
+  
+
+  
+
+  
+  
 
   
 
@@ -298,18 +317,17 @@
   
 
   
-
-  
   
 
   
-
-  
-  
-
-  
-  
-
+      ,"page10": {
+          "title": "",
+          "content": ". layout: home search_exclude: true image: images/logo.png title: Posts – .",
+          "url": "https://joedockrill.github.io/blog/page2/",
+          "relUrl": "/page2/",
+          "date": ""
+      }
+      
   
 
   
