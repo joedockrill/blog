@@ -433,7 +433,7 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 /*-----------------------------------*/
 /*----- ADD YOUR STYLES BELOW -------*/
-site-header { background-color: #92A2BA; }
+site-header.div { background-color: #92A2BA; font-weight: bold; }
 
 .language-python + .language-plaintext { border-left: 1px solid grey; margin-left: 1rem !important; }
 
