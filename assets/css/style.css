@@ -483,6 +483,6 @@ table { display: block !important; overflow-x: auto; white-space: nowrap; font-s
 
 table th { text-align: center !important; }
 
-table td { text-overflow: inherit; overflow: visible; max-width: none; }
+table td { max-width: none; }
 
 /*# sourceMappingURL=style.css.map */
