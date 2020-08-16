@@ -22,8 +22,8 @@ table {
     text-align: center! important;
   }
   td{
-    text-overflow:ellipsis;
-    overflow:hidden;
+    text-overflow:none;
+    overflow:none;
     max-width: none;
   }
 }
