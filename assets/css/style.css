@@ -411,12 +411,7 @@ h1:hover .anchor-link, h2:hover .anchor-link, h3:hover .anchor-link, h4:hover .a
 
 .search-result-highlight { color: #2e0137; font-weight: bold; }
 
-table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 75%; border: none; }
-
-table th { text-align: center !important; }
-
-table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
-
+/* table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 75%; border:none; th{ text-align: center! important; } td{ text-overflow:ellipsis; overflow:hidden; max-width: 15em; } } */
 ::-webkit-scrollbar { width: 14px; height: 18px; }
 
 ::-webkit-scrollbar-thumb { height: 6px; border: 4px solid rgba(0, 0, 0, 0); background-clip: padding-box; -webkit-border-radius: 7px; background-color: #9D9D9D; -webkit-box-shadow: inset -1px -1px 0px rgba(0, 0, 0, 0.05), inset 1px 1px 0px rgba(0, 0, 0, 0.05); }
@@ -484,10 +479,10 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .highlight .gd { color: #ff5555; }
 
-table { display: block !important; overflow-x: visible; white-space: nowrap; font-size: 75%; border: none; max-width: 100%; }
+table { display: block !important; overflow-x: auto; white-space: nowrap; font-size: 75%; border: none; max-width: 100%; }
 
 table th { text-align: center !important; }
 
-table td { text-overflow: none; overflow: visible; max-width: none; }
+table td { text-overflow: inherit; overflow: visible; max-width: none; }
 
 /*# sourceMappingURL=style.css.map */
