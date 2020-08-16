@@ -484,7 +484,7 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .highlight .gd { color: #ff5555; }
 
-table { display: block !important; overflow-x: visible; white-space: nowrap; font-size: 75%; border: none; }
+table { display: block !important; overflow-x: visible; white-space: nowrap; font-size: 75%; border: none; max-width: 100%; }
 
 table th { text-align: center !important; }
 
