@@ -18,12 +18,12 @@ table {
   white-space: nowrap;
   font-size: 75%;
   border:none;
+  table-layout: fixed;
   max-width: 100%;
   th{
     text-align: center! important;
   }
   td{
  //   overflow:visible;
-    max-width: none;
   }
 }
