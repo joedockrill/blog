@@ -479,7 +479,7 @@ h1:hover .anchor-link, h2:hover .anchor-link, h3:hover .anchor-link, h4:hover .a
 
 .highlight .gd { color: #ff5555; }
 
-table { display: flex !important; overflow-x: auto; font-size: 75%; border: none; max-width: 100%; }
+table { display: block !important; overflow-x: auto; font-size: 75%; border: none; max-width: 100%; }
 
 table th { text-align: center !important; }
 
