@@ -13,7 +13,7 @@
 
 // Handle Overflow With Table Output
 table {
-  display: block !important;
+  display: flex !important;
   overflow-x: auto;
   white-space: nowrap;
   font-size: 75%;
