@@ -488,6 +488,6 @@ table { white-space: normal; max-width: 100%; }
 
 table td { max-width: none; }
 
-div.roundbox { padding: 5px; border-radius: 10px; border: 1px solid #969696; box-shadow: 3px 3px #E2E2E2; width: 95%; }
+div.roundbox { padding: 5px; border-radius: 10px; border: 1px solid #969696; box-shadow: 3px 3px #E2E2E2; width: 100%; }
 
 /*# sourceMappingURL=style.css.map */
