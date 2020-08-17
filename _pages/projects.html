@@ -11,8 +11,10 @@ search_exclude: true
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
         <article class="archive-item">
           <p class="post-meta post-meta-title">
-              {{ post.date | date: date_format }}</br>
-              <a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a>
+              <div class="roundbox">
+                  <a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></br>
+                  {{ post.date | date: date_format }}
+              </div>
           </p>
           <p>&nbsp;</p>
         </article>
