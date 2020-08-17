@@ -10,19 +10,10 @@
 // If you want to turn off dark background for syntax highlighting, comment or delete the below line.
 @import "minima/fastpages-dracula-highlight"; 
 
-
-// Handle Overflow With Table Output
 table {
-  display: block !important;
-  overflow-x: auto;
-//  white-space: nowrap;
-  font-size: 75%;
-  border:none;
+  white-space: normal;
   max-width: 100%;
-  th{
-    text-align: center! important;
-  }
   td{
- //   overflow:visible;
+    max-width: none;
   }
 }
