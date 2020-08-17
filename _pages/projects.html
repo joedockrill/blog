@@ -7,20 +7,18 @@ search_exclude: true
 <h1>Portfolio projects, side projects &amp; toys created along the way</h1>
 
 {% for post in site.categories["Projects"] %}
+<ul class="post-list">
     {% if post.hide != true %}
         {%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
-
-              <div class="roundbox">
-                <h3>
-                    <a class="post-link" href="{{ post.url | relative_url }}">
-                    {{ post.title | escape }}
-                    </a>
-                </h3>
-                {%- if site.show_description and post.description  -%}
-                <p class="post-meta-description">{{ post.description }}</p>
-                {%- endif -%}
-                <p class="post-meta">{{ post.date | date: date_format }}</p>
-            </div>
-
+            <li>
+                <div class="roundbox">
+                  {%- if site.show_image -%}
+                      {%- include post_list_image_card.html -%}
+                  {% else %}
+                      {%- include post_list.html -%}
+                  {%- endif -%}
+                </div>
+              </li>
     {% endif %}
+</ul>
 {% endfor %}
