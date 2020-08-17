@@ -331,8 +331,6 @@ table td { border: 1px solid #e8e8e8; }
 /** Grid helpers */
 @media screen and (min-width: 1200px) { .one-half { width: calc(50% - (30px / 2)); } }
 
-/*-----------------------------------*/
-/*--- IMPORT STYLES FOR FASTPAGES ---*/
 .post img { display: block; vertical-align: top; margin-left: auto; margin-right: auto; }
 
 img.emoji { display: inline !important; vertical-align: baseline !important; }
@@ -431,8 +429,6 @@ table td { text-overflow: ellipsis; overflow: hidden; max-width: 15em; }
 
 .svg-icon.orange { width: 30px; height: 23px; }
 
-/*-----------------------------------*/
-/*----- ADD YOUR STYLES BELOW -------*/
 .language-python + .language-plaintext { border-left: 1px solid grey; margin-left: 1rem !important; }
 
 [class^="language-"]:not(.language-plaintext) pre, [class^="language-"]:not(.language-plaintext) code { background-color: #323443 !important; color: #f8f8f2; }
