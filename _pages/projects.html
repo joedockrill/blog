@@ -12,7 +12,8 @@ search_exclude: true
         <article class="archive-item">
           <p class="post-meta post-meta-title">
               <div class="roundbox">
-                  <a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></br>
+                  <h3><a class="page-meta" href="{{ site.baseurl }}{{ post.url }}">{{post.title}}</a></h3></br>
+                  <em>{{ post.description }}</em>
                   {{ post.date | date: date_format }}
               </div>
           </p>
