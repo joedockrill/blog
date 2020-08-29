@@ -46,9 +46,9 @@ include:
   - _pages
 
 default_badges:
-  github: true
+  github: false
   binder: false
-  colab: true
+  colab: false
 
 # Escape HTML in post descriptions
 html_escape:
