@@ -2,22 +2,22 @@
   
     
         "post0": {
-            "title": "Follow Friday: Sylvain Gugger",
-            "content": "Sylvain Gugger is a very clever little dude. He is one of the 2 core developers of fast.ai, research engineer at huggingface which does some mentally good looking NLP stuff, and co-author of the fast.ai book. His blog is rather short but still worth checking out. .",
-            "url": "https://joedockrill.github.io/blog/2020/08/21/follow-friday-sylvain-gugger/",
-            "relUrl": "/2020/08/21/follow-friday-sylvain-gugger/",
-            "date": " • Aug 21, 2020"
+            "title": "Creating a neural net from scratch in Python",
+            "content": "So I&#39;m one lesson into part 2 of the Fastai course (2019) on account of Fastai 2 not being quite ready for release yet. . Not what I was expecting! I was expecting more advanced topics like object detection, style transfer, etc etc. In previous years this is what part 2 was mainly about. . The 2019 version of part 2 however, starts with recreating the basics of Fastai, from scratch, in Python. . You get to start with only the most basic libraries, and you don&#39;t get to use any pre-existing DL stuff until you&#39;ve written it yourself from scratch, so for example you&#39;re not allowed to use m1@m2 until you&#39;ve implemented your own matmul. The first lesson starts with matmul using 3 nested loops and works it&#39;s way up using element-wise maths, broadcasting, einsum etc until you&#39;ve got something (literally) about fifty thousand times faster than 3 nested loops; Then you&#39;re allowed to use @. . It&#39;s very interesting. While it&#39;s not really necessary for you to go this deep into how neural nets work, some people just understand things better this way, and I&#39;m one of them. Also the flip-side of &#39;you don&#39;t really need to know this&#39; is that when papers and new techniques come along, if you do understand this then it&#39;s going to be much easier to experiment with new archtecture ideas, new activation functions, optimisations etc. . So that&#39;s me for the next little while. Next Tuesday I need to pack my family back into the car and drive back across Europe to the UK, and go back to my day job. I&#39;m not as close as I&#39;d like to applying for DS jobs, but there&#39;s been a lot more to learn than I anticipated. . Note: If you&#8217;re in the London or Surrey area and want to talk to me about a job, please get in touch. joedockrill@gmail.com .",
+            "url": "https://joedockrill.github.io/blog/2020/08/28/creating-a-neural-net-from-scratch/",
+            "relUrl": "/2020/08/28/creating-a-neural-net-from-scratch/",
+            "date": " • Aug 28, 2020"
         }
         
     
   
     
         ,"post1": {
-            "title": "Creating a neural net from scratch in Python",
-            "content": "So I&#39;m one lesson into part 2 of the Fastai course (2019) on account of Fastai 2 not being quite ready for release yet. . Not what I was expecting! I was expecting more advanced topics like object detection, style transfer, etc etc. In previous years this is what part 2 was mainly about. . The 2019 version of part 2 however, starts with recreating the basics of Fastai, from scratch, in Python. . You get to start with only the most basic libraries, and you don&#39;t get to use any pre-existing DL stuff until you&#39;ve written it yourself from scratch, so for example you&#39;re not allowed to use m1@m2 until you&#39;ve implemented your own matmul. The first lesson starts with matmul using 3 nested loops and works it&#39;s way up using element-wise maths, broadcasting, einsum etc until you&#39;ve got something (literally) about fifty thousand times faster than 3 nested loops; Then you&#39;re allowed to use @. . It&#39;s very interesting. While it&#39;s not really necessary for you to go this deep into how neural nets work, some people just understand things better this way, and I&#39;m one of them. Also the flip-side of &#39;you don&#39;t really need to know this&#39; is that when papers and new techniques come along, if you do understand this then it&#39;s going to be much easier to experiment with new archtecture ideas, new activation functions, optimisations etc. . So that&#39;s me for the next little while. Next Tuesday I need to pack my family back into the car and drive back across Europe to the UK, and go back to my day job. I&#39;m not as close as I&#39;d like to applying for DS jobs, but there&#39;s been a lot more to learn than I anticipated. . Note: If you&#8217;re in the London or Surrey area and want to talk to me about a job, please get in touch. joedockrill@gmail.com .",
-            "url": "https://joedockrill.github.io/blog/2020/08/20/creating-a-neural-net-from-scratch/",
-            "relUrl": "/2020/08/20/creating-a-neural-net-from-scratch/",
-            "date": " • Aug 20, 2020"
+            "title": "Follow Friday: Sylvain Gugger",
+            "content": "Sylvain Gugger is a very clever little dude. He is one of the 2 core developers of fast.ai, research engineer at huggingface which does some mentally good looking NLP stuff, and co-author of the fast.ai book. His blog is rather short but still worth checking out. .",
+            "url": "https://joedockrill.github.io/blog/2020/08/21/follow-friday-sylvain-gugger/",
+            "relUrl": "/2020/08/21/follow-friday-sylvain-gugger/",
+            "date": " • Aug 21, 2020"
         }
         
     
