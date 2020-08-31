@@ -4,11 +4,12 @@
   {%- include head.html -%}
 
   <body>
-    <img src="{{site.baseurl}}/images/web-header-wide.png">
-    {%- include header.html -%}
-    
+        
     <main class="page-content" aria-label="Content">
       <div class="wrapper">
+        <img src="{{site.baseurl}}/images/web-header-wide.png">
+        {%- include header.html -%}
+
         {{ content }}
       </div>
     </main>
