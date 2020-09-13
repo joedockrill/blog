@@ -4,20 +4,20 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Creating a neural net from scratch in Python | Joe Dockrill</title>
+<title>Finishing vs Publishing | Joe Dockrill</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Creating a neural net from scratch in Python" />
+<meta property="og:title" content="Finishing vs Publishing" />
 <meta name="author" content="Joe Dockrill" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="MOOC Part 2: Recreating fastai from the ground up" />
-<meta property="og:description" content="MOOC Part 2: Recreating fastai from the ground up" />
-<link rel="canonical" href="https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/" />
-<meta property="og:url" content="https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/" />
+<meta name="description" content="Increasing productivity for creatives" />
+<meta property="og:description" content="Increasing productivity for creatives" />
+<link rel="canonical" href="https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/" />
 <meta property="og:site_name" content="Joe Dockrill" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-08-30T00:00:00-05:00" />
+<meta property="article:published_time" content="2020-09-13T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"MOOC Part 2: Recreating fastai from the ground up","@type":"BlogPosting","headline":"Creating a neural net from scratch in Python","url":"https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/","datePublished":"2020-08-30T00:00:00-05:00","dateModified":"2020-08-30T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"Increasing productivity for creatives","@type":"BlogPosting","headline":"Finishing vs Publishing","url":"https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/","datePublished":"2020-09-13T00:00:00-05:00","dateModified":"2020-09-13T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><!-- the google_analytics_id gets auto inserted from the config file -->
 
@@ -26,20 +26,20 @@
 <script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-175488888-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
 
 <link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Creating a neural net from scratch in Python | Joe Dockrill</title>
+<title>Finishing vs Publishing | Joe Dockrill</title>
 <meta name="generator" content="Jekyll v4.0.0" />
-<meta property="og:title" content="Creating a neural net from scratch in Python" />
+<meta property="og:title" content="Finishing vs Publishing" />
 <meta name="author" content="Joe Dockrill" />
 <meta property="og:locale" content="en_US" />
-<meta name="description" content="MOOC Part 2: Recreating fastai from the ground up" />
-<meta property="og:description" content="MOOC Part 2: Recreating fastai from the ground up" />
-<link rel="canonical" href="https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/" />
-<meta property="og:url" content="https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/" />
+<meta name="description" content="Increasing productivity for creatives" />
+<meta property="og:description" content="Increasing productivity for creatives" />
+<link rel="canonical" href="https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/" />
 <meta property="og:site_name" content="Joe Dockrill" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-08-30T00:00:00-05:00" />
+<meta property="article:published_time" content="2020-09-13T00:00:00-05:00" />
 <script type="application/ld+json">
-{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"MOOC Part 2: Recreating fastai from the ground up","@type":"BlogPosting","headline":"Creating a neural net from scratch in Python","url":"https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/","datePublished":"2020-08-30T00:00:00-05:00","dateModified":"2020-08-30T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/2020/08/30/creating-a-neural-net-from-scratch/"},"@context":"https://schema.org"}</script>
+{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"Increasing productivity for creatives","@type":"BlogPosting","headline":"Finishing vs Publishing","url":"https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/","datePublished":"2020-09-13T00:00:00-05:00","dateModified":"2020-09-13T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/2020/09/13/finishing-vs-publishing/"},"@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
 <link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
@@ -103,8 +103,8 @@ window.onload = wrap_img;
 <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
 
   <header class="post-header">
-    <h1 class="post-title p-name" itemprop="name headline">Creating a neural net from scratch in Python</h1><p class="page-description">MOOC Part 2: Recreating fastai from the ground up</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-30T00:00:00-05:00" itemprop="datePublished">
-        Aug 30, 2020
+    <h1 class="post-title p-name" itemprop="name headline">Finishing vs Publishing</h1><p class="page-description">Increasing productivity for creatives</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-09-13T00:00:00-05:00" itemprop="datePublished">
+        Sep 13, 2020
       </time>
        • <span class="read-time" title="Estimated read time">
     
@@ -137,7 +137,7 @@ window.onload = wrap_img;
 #################################################
 ### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
 #################################################
-# file to edit: _notebooks/2020-8-18-Creating-a-neural-net-from-scratch.ipynb
+# file to edit: _notebooks/2020-09-13-finishing-vs-publishing.ipynb
 -->
 
 <div class="container" id="notebook-container">
@@ -152,17 +152,14 @@ window.onload = wrap_img;
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>So I'm one lesson into <a href="https://course.fast.ai/videos/?lesson=8">part 2</a> of the <a href="https://course.fast.ai/">Fastai course (2019)</a> on account of Fastai 2 not being quite ready for release yet.</p>
-<p>Not what I was expecting! I <em>was</em> expecting more advanced topics like object detection, style transfer, etc etc. In previous years this is what part 2 was mainly about.</p>
-<p>The 2019 version of part 2 however, starts with recreating the basics of Fastai, from scratch, in Python.</p>
-<p>You get to start with only the most basic libraries, and you don't get to use any pre-existing DL stuff until you've written it yourself from scratch, so for example you're not allowed to use <code>m1@m2</code> until you've implemented your own matmul. The first lesson starts with matmul using 3 nested loops and works it's way up using element-wise maths, broadcasting, einsum etc until you've got something (literally) about fifty thousand times faster than 3 nested loops; Then you're allowed to use <code>@</code>.</p>
-<p>It's very interesting. While it's not really necessary for you to go this deep into how neural nets work, some people just understand things better this way, and I'm one of them. Also the flip-side of 'you don't really need to know this' is that when papers and new techniques come along, if you <em>do</em> understand this then it's going to be much easier to experiment with new archtecture ideas, new activation functions, optimisations etc.</p>
-<p>So that's me for the next little while. Next Tuesday I need to pack my family back into the car and drive back across Europe to the UK, and go back to my day job. I'm not as close as I'd like to applying for DS jobs, but there's been a <strong>lot</strong> more to learn than I anticipated.
+<p>The following is a talk given by a musician called Jack Conte on how to increase productivity and is well worth 10 minutes of your day.</p>
+<p>It is told from the perspective of his work as a musician, but the lessons apply to all creatives. That includes <strong>you</strong> as a software developer. It can be difficult sometimes to stop yourself getting sucked into a hole of endless tweaking towards a perfection which never actually comes. You owe it to yourself to learn when to <strong>stop</strong> and <strong>learn to publish</strong>.
+
 </p>
-<div class="flash">
-    <svg class="octicon octicon-info" viewbox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 01-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 01-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg>
-    <strong>Note: </strong>If you’re in the London or Surrey area and want to talk to me about a job, please get in touch. <a href="mailto:joedockrill@gmail.com">joedockrill@gmail.com</a>
-</div>
+<center>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/watch?v=5EuWCFCgy58" frameborder="0" allowfullscreen=""></iframe>
+</center>
+
 
 </div>
 </div>
@@ -179,7 +176,7 @@ window.onload = wrap_img;
         theme="github-light"
         crossorigin="anonymous"
         async>
-</script><a class="u-url" href="/blog/2020/08/30/creating-a-neural-net-from-scratch/" hidden></a>
+</script><a class="u-url" href="/blog/2020/09/13/finishing-vs-publishing/" hidden></a>
 </article>
       </div>
     </main><footer class="site-footer h-card">
