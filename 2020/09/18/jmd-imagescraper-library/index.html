@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>jmd_imagescraper library | Joe Dockrill</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="jmd_imagescraper library" />
+<meta name="author" content="Joe Dockrill" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Finding an excuse to play with nbdev" />
+<meta property="og:description" content="Finding an excuse to play with nbdev" />
+<link rel="canonical" href="https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/" />
+<meta property="og:site_name" content="Joe Dockrill" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-09-18T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"Finding an excuse to play with nbdev","@type":"BlogPosting","headline":"jmd_imagescraper library","url":"https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/","datePublished":"2020-09-18T00:00:00-05:00","dateModified":"2020-09-18T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/blog/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-175488888-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/blog/images/favicon.ico"><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>jmd_imagescraper library | Joe Dockrill</title>
+<meta name="generator" content="Jekyll v4.0.0" />
+<meta property="og:title" content="jmd_imagescraper library" />
+<meta name="author" content="Joe Dockrill" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Finding an excuse to play with nbdev" />
+<meta property="og:description" content="Finding an excuse to play with nbdev" />
+<link rel="canonical" href="https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/" />
+<meta property="og:url" content="https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/" />
+<meta property="og:site_name" content="Joe Dockrill" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-09-18T00:00:00-05:00" />
+<script type="application/ld+json">
+{"author":{"@type":"Person","name":"Joe Dockrill"},"description":"Finding an excuse to play with nbdev","@type":"BlogPosting","headline":"jmd_imagescraper library","url":"https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/","datePublished":"2020-09-18T00:00:00-05:00","dateModified":"2020-09-18T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://joedockrill.github.io/blog/2020/09/18/jmd-imagescraper-library/"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+<link href="https://unpkg.com/@primer/css/dist/primer.css" rel="stylesheet" />
+<link rel="stylesheet" href="//use.fontawesome.com/releases/v5.0.7/css/all.css"><link type="application/atom+xml" rel="alternate" href="https://joedockrill.github.io/blog/feed.xml" title="Joe Dockrill" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','UA-175488888-1','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body>
+        
+    <main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <img src="/blog/images/web-header-wide.png"><header class="site-header" style="background-color: #92A2BA; font-weight: bold;">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/blog/">Home</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/blog/about/">About</a><a class="page-link" href="/blog/projects/">Projects</a><a class="page-link" href="/blog/search/">Search</a><a class="page-link" href="/blog/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">jmd_imagescraper library</h1><p class="page-description">Finding an excuse to play with nbdev</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-09-18T00:00:00-05:00" itemprop="datePublished">
+        Sep 18, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/blog/categories/#Tools">Tools</a>
+        
+      
+      </p>
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          
+          
+          
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+</ul><!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2020-09-18-jmd_imagescraper-library.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Somebody asked at some point if I could turn my image scraping notebook into an installable library, and I've been meaning to have a look at <a href="https://nbdev.fast.ai/">nbdev</a> for a while anyway.</p>
+<p>Nbdev is great as it basically lets you develop a software library in Jupyter notebooks, and then turns them into library + documentation + install packages. I can't recommend it highly enough. It's well worth watching the youtube video to get an idea of what it does.</p>
+<p>So now you can use my image scraper like this (which is far more convenient, let's be honest):</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="o">!</span>pip install -q jmd_imagescraper
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="n">root</span> <span class="o">=</span> <span class="n">Path</span><span class="p">()</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">/</span><span class="s2">"images"</span>
+
+<span class="kn">from</span> <span class="nn">jmd_imagescraper.core</span> <span class="kn">import</span> <span class="o">*</span> <span class="c1"># dont't worry, it's designed to work with import *</span>
+
+<span class="n">duckduckgo_search</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">"Cats"</span><span class="p">,</span> <span class="s2">"cute kittens"</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">duckduckgo_search</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">"Dogs"</span><span class="p">,</span> <span class="s2">"cute puppies"</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">duckduckgo_search</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="s2">"Birds"</span><span class="p">,</span> <span class="s2">"cute baby ducks and chickens"</span><span class="p">,</span> <span class="n">max_results</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Duckduckgo search: cute kittens
+Downloading results into /content/images/Cats
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+
+    <div>
+        <style>
+            /* Turns off some styling */
+            progress {
+                /* gets rid of default border in Firefox and Opera. */
+                border: none;
+                /* Needs to be in here for Safari polyfill so background images work as expected. */
+                background-size: auto;
+            }
+            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+                background: #F44336;
+            }
+        </style>
+      <progress value="10" class="" max="10" style="width:300px; height:20px; vertical-align: middle;"></progress>
+      100.00% [10/10 00:01&lt;00:00 Images downloaded]
+    </div>
+    
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Duckduckgo search: cute puppies
+Downloading results into /content/images/Dogs
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+
+    <div>
+        <style>
+            /* Turns off some styling */
+            progress {
+                /* gets rid of default border in Firefox and Opera. */
+                border: none;
+                /* Needs to be in here for Safari polyfill so background images work as expected. */
+                background-size: auto;
+            }
+            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+                background: #F44336;
+            }
+        </style>
+      <progress value="10" class="" max="10" style="width:300px; height:20px; vertical-align: middle;"></progress>
+      100.00% [10/10 00:00&lt;00:00 Images downloaded]
+    </div>
+    
+</div>
+
+</div>
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Duckduckgo search: cute baby ducks and chickens
+Downloading results into /content/images/Birds
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+
+<div class="output_html rendered_html output_subarea ">
+
+    <div>
+        <style>
+            /* Turns off some styling */
+            progress {
+                /* gets rid of default border in Firefox and Opera. */
+                border: none;
+                /* Needs to be in here for Safari polyfill so background images work as expected. */
+                background-size: auto;
+            }
+            .progress-bar-interrupted, .progress-bar-interrupted::-webkit-progress-bar {
+                background: #F44336;
+            }
+        </style>
+      <progress value="10" class="" max="10" style="width:300px; height:20px; vertical-align: middle;"></progress>
+      100.00% [10/10 00:01&lt;00:00 Images downloaded]
+    </div>
+    
+</div>
+
+</div>
+
+<div class="output_area">
+
+
+
+<div class="output_text output_subarea output_execute_result">
+<pre>[PosixPath('/content/images/Birds/001.jpg'),
+ PosixPath('/content/images/Birds/002.jpg'),
+ PosixPath('/content/images/Birds/003.jpg'),
+ PosixPath('/content/images/Birds/004.jpg'),
+ PosixPath('/content/images/Birds/005.jpg'),
+ PosixPath('/content/images/Birds/006.jpg'),
+ PosixPath('/content/images/Birds/007.jpg'),
+ PosixPath('/content/images/Birds/008.jpg'),
+ PosixPath('/content/images/Birds/009.jpg'),
+ PosixPath('/content/images/Birds/010.jpg')]</pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">jmd_imagescraper.imagecleaner</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="n">display_image_cleaner</span><span class="p">(</span><span class="n">root</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Boom. Docs are at <a href="https://joedockrill.github.io/jmd_imagescraper/">https://joedockrill.github.io/jmd_imagescraper/</a>, the repo it was all generated from is at <a href="https://github.com/joedockrill/jmd_imagescraper/">https://github.com/joedockrill/jmd_imagescraper/</a> but the meat of it is basically just in 00_core.ipynb, 01_imagecleaner.ipynb and index.ipynb.</p>
+<p>I'll write more about this later I'm sure but for now I just wanted to let people know it's available as a package.</p>
+
+</div>
+</div>
+</div>
+</div>
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"f10307b5ca834e58b6cbfbf80db1ee7b": {"model_module": "@jupyter-widgets/controls", "model_name": "HBoxModel", "state": {"_view_name": "HBoxView", "_dom_classes": [], "_model_name": "HBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_f9a1deb42b9d430e8a4535ef23d0bdae", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_bc60a26d3f384405a4093ea2cbad00a5", "IPY_MODEL_67e0229647c24b75b31cc1c34b675d21", "IPY_MODEL_3a488a44657645728c1abce28b369886", "IPY_MODEL_d151542c028045d7a5ad04bb6b00aab7", "IPY_MODEL_5660379e29fa4c1c839ec9b8c0eeefc5", "IPY_MODEL_3af8f251df8540b88e9a03beee4e5c40", "IPY_MODEL_71849b0f5695474f8d3ccea74c53fae8"]}}, "f9a1deb42b9d430e8a4535ef23d0bdae": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "bc60a26d3f384405a4093ea2cbad00a5": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_5d3019fa67394ac2b4ed4ab43748ea99", "_dom_classes": [], "description": "|<<", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": true, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_867ddd705aa94231b9950375ad865231", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "67e0229647c24b75b31cc1c34b675d21": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_f8dac5fe67604e459fdbf9c655462f2a", "_dom_classes": [], "description": "<<", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": true, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_3a9fd9d9d86847b1897b1d3b87c535ba", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "3a488a44657645728c1abce28b369886": {"model_module": "@jupyter-widgets/controls", "model_name": "LabelModel", "state": {"_view_name": "LabelView", "style": "IPY_MODEL_1c817492426941bea3780fe09ab2dd08", "_dom_classes": [], "description": "", "_model_name": "LabelModel", "placeholder": "\u200b", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": "Page 1 of 2", "_view_count": null, "_view_module_version": "1.5.0", "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_6a107ab9c75f4a0387466aed295fa34b"}}, "d151542c028045d7a5ad04bb6b00aab7": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_5e00e28db1544b159b77db79b79914f4", "_dom_classes": [], "description": ">>", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_fa4fc2b3cc0442e495e915fd280ce56f", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "5660379e29fa4c1c839ec9b8c0eeefc5": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_4e825395ee484fa6b4c4d9605568e184", "_dom_classes": [], "description": ">>|", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_7e4d7363aa6e49678bd7bc0737decd78", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "3af8f251df8540b88e9a03beee4e5c40": {"model_module": "@jupyter-widgets/controls", "model_name": "DropdownModel", "state": {"_options_labels": ["Birds", "Cats", "Dogs"], "_view_name": "DropdownView", "style": "IPY_MODEL_3d3c4356cc64498aa7c43f8affc96401", "_dom_classes": [], "description": "Folder: ", "_model_name": "DropdownModel", "index": 0, "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_6235a550a0be46548f0e10a8ca0f2b45"}}, "71849b0f5695474f8d3ccea74c53fae8": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_851ef13675ed42f9b79ad0cd2d77f117", "_dom_classes": [], "description": "\u21bb", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_41228194ab294dc7a8086b48f46ae26a", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "5d3019fa67394ac2b4ed4ab43748ea99": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "867ddd705aa94231b9950375ad865231": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "f8dac5fe67604e459fdbf9c655462f2a": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "3a9fd9d9d86847b1897b1d3b87c535ba": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "1c817492426941bea3780fe09ab2dd08": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "state": {"_view_name": "StyleView", "_model_name": "DescriptionStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "6a107ab9c75f4a0387466aed295fa34b": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": "center", "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "100px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": "flex", "left": null}}, "5e00e28db1544b159b77db79b79914f4": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "fa4fc2b3cc0442e495e915fd280ce56f": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "4e825395ee484fa6b4c4d9605568e184": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "7e4d7363aa6e49678bd7bc0737decd78": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "60px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "3d3c4356cc64498aa7c43f8affc96401": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "state": {"_view_name": "StyleView", "_model_name": "DescriptionStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "6235a550a0be46548f0e10a8ca0f2b45": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "851ef13675ed42f9b79ad0cd2d77f117": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "41228194ab294dc7a8086b48f46ae26a": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "40px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "0px 0px 0px 10px", "display": null, "left": null}}, "87b0a59228564aaa8275d8f2ba5b60ab": {"model_module": "@jupyter-widgets/controls", "model_name": "HTMLModel", "state": {"_view_name": "HTMLView", "style": "IPY_MODEL_695dbefe379a440980d7afde07a5d13c", "_dom_classes": [], "description": "", "_model_name": "HTMLModel", "placeholder": "\u200b", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "value": "<h2>No images left to display in this folder.</h2>", "_view_count": null, "_view_module_version": "1.5.0", "description_tooltip": null, "_model_module": "@jupyter-widgets/controls", "layout": "IPY_MODEL_993932ab6f8a4887907c873cfd3b55ad"}}, "695dbefe379a440980d7afde07a5d13c": {"model_module": "@jupyter-widgets/controls", "model_name": "DescriptionStyleModel", "state": {"_view_name": "StyleView", "_model_name": "DescriptionStyleModel", "description_width": "", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "993932ab6f8a4887907c873cfd3b55ad": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "hidden", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "a1269dde5f53452980be5152728eec58": {"model_module": "@jupyter-widgets/controls", "model_name": "GridBoxModel", "state": {"_view_name": "GridBoxView", "_dom_classes": [], "_model_name": "GridBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_34d111d0617348fdbfb16a0c440879c0", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_41cffb87adbb46f085ac5f1293519177", "IPY_MODEL_23b956dfa2b9462aad6cec462f5a904d", "IPY_MODEL_360219d1516f4385b5ef3223ff83d0fb", "IPY_MODEL_57f21498e294466595da05b461d674e5", "IPY_MODEL_d06c1f8e60994d00823148bc6f4405c6", "IPY_MODEL_5ab969ba915a46b9ace347dba6c94cc7", "IPY_MODEL_54ec5c1858044d7395f48f21713e5965", "IPY_MODEL_379ebb34e7fd4fce972661c9ea8503ce"]}}, "34d111d0617348fdbfb16a0c440879c0": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": "repeat(4, 25%)", "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "15px", "display": null, "left": null}}, "41cffb87adbb46f085ac5f1293519177": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_73f3eb1954ca4fbf91e4e238ee7b2f16", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_ca85f4132c0a42bb92eb9a79788736b8", "IPY_MODEL_1029650dedbb4c029cf6afe2847b0ea8"]}}, "23b956dfa2b9462aad6cec462f5a904d": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_ecfd439264754e4cab526d16dfe33a22", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_d61f9e7dd7c041da9da87e21623c26cd", "IPY_MODEL_79bdf54ab56042c9ac608ee3ebb489de"]}}, "360219d1516f4385b5ef3223ff83d0fb": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_7615a98b0a2243849f11bcad729abc81", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_c445ae538a9541ca9542e23a696b0861", "IPY_MODEL_d9136278be9c4b27976967473fa81df1"]}}, "57f21498e294466595da05b461d674e5": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_985655b09ee94c659937606aa92eb82c", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_f3781c1656ac4db8bed56761498ec95a", "IPY_MODEL_ea874ecc01ef438ba2ad039c8c7dae0e"]}}, "d06c1f8e60994d00823148bc6f4405c6": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_971a175ab5374d95afed6bb6835c4235", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_108ecab1e3e6438ca995ba387c292a79", "IPY_MODEL_d9c535c5c4444844be25ce3458afa193"]}}, "5ab969ba915a46b9ace347dba6c94cc7": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_e8270f1bd15543b79ab2df8ed66c1bbf", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_7ba7fc0a274a46d9beffbb34cd5b487f", "IPY_MODEL_ac4c60df7f2740ca83ec6c086a937680"]}}, "54ec5c1858044d7395f48f21713e5965": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_06848bb2a0514fa3ade6b5af5660bf60", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_4f4b5a1592aa45808e7046009c69dc2e", "IPY_MODEL_12c849d296a5432aa5edb186095b1e58"]}}, "379ebb34e7fd4fce972661c9ea8503ce": {"model_module": "@jupyter-widgets/controls", "model_name": "VBoxModel", "state": {"_view_name": "VBoxView", "_dom_classes": [], "_model_name": "VBoxModel", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "_view_module_version": "1.5.0", "box_style": "", "layout": "IPY_MODEL_2c025b78a6ce478cac54966579853259", "_model_module": "@jupyter-widgets/controls", "children": ["IPY_MODEL_3f0e0e7cc6fa4435915102c6e261f5b4", "IPY_MODEL_c9a2b52feafa41e58c3eab0363e8277c"]}}, "73f3eb1954ca4fbf91e4e238ee7b2f16": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "ca85f4132c0a42bb92eb9a79788736b8": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_ca3bf7b44dd04b3396f9c9d0fa74ee43", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "1029650dedbb4c029cf6afe2847b0ea8": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_1ae14e5c610a40f997c99a678eabcdb6", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_95b2f6aef4d041608079dfa073d138d8", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "ecfd439264754e4cab526d16dfe33a22": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "d61f9e7dd7c041da9da87e21623c26cd": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_20d6819cd0444637912333b3d833cc90", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "79bdf54ab56042c9ac608ee3ebb489de": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_92372958a88447938928e29ce8cf7b81", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_f5902d0568014b178baa308a059c57b9", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "7615a98b0a2243849f11bcad729abc81": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "c445ae538a9541ca9542e23a696b0861": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_da68562c770b42228c3af01d021b9026", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "d9136278be9c4b27976967473fa81df1": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_ea240d9f4ffc4e65bfc0f7df784e0e35", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_13bd3c1dff8345a68a19a5f76de4d191", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "985655b09ee94c659937606aa92eb82c": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "f3781c1656ac4db8bed56761498ec95a": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_95d928c7d8644ac5939f8ea76bdf50f1", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "ea874ecc01ef438ba2ad039c8c7dae0e": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_28ebad4388b2445ea75e774af42f8ab4", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_5361018e8efa4ce687b105505e17394a", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "971a175ab5374d95afed6bb6835c4235": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "108ecab1e3e6438ca995ba387c292a79": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_d4ddb6596541483c91943e2ef36de6a7", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "d9c535c5c4444844be25ce3458afa193": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_4d3945f46d83454a93ef4ce6327aa98d", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_186989d519f143669a7e99f0aef155e0", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "e8270f1bd15543b79ab2df8ed66c1bbf": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "7ba7fc0a274a46d9beffbb34cd5b487f": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_ed35af2658384955aaceac05c654b3e2", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "ac4c60df7f2740ca83ec6c086a937680": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_1df23cba8b0d4497a658028e45303429", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_6c76500652934d44b9c69a447bc18aa9", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "06848bb2a0514fa3ade6b5af5660bf60": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "4f4b5a1592aa45808e7046009c69dc2e": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_b3a907e86d6a40368ea21e8eb1c04d24", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "12c849d296a5432aa5edb186095b1e58": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_970abfe7ad85444eb1735bbc2a5dfe86", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_b1fed686962e43a3b7b0bee023b74a84", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "2c025b78a6ce478cac54966579853259": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": "visible", "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": "5px", "display": null, "left": null}}, "3f0e0e7cc6fa4435915102c6e261f5b4": {"model_module": "@jupyter-widgets/controls", "model_name": "ImageModel", "state": {"_view_name": "ImageView", "_dom_classes": [], "_model_name": "ImageModel", "format": "png", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "_view_count": null, "width": "", "_view_module_version": "1.5.0", "layout": "IPY_MODEL_b14ec0a873eb4f6b8632e345cadabd7a", "height": "", "_model_module": "@jupyter-widgets/controls"}}, "c9a2b52feafa41e58c3eab0363e8277c": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonModel", "state": {"_view_name": "ButtonView", "style": "IPY_MODEL_e3814c1269b3489089a66efac2a290f2", "_dom_classes": [], "description": "Delete", "_model_name": "ButtonModel", "button_style": "", "_view_module": "@jupyter-widgets/controls", "_model_module_version": "1.5.0", "tooltip": "", "_view_count": null, "disabled": false, "_view_module_version": "1.5.0", "layout": "IPY_MODEL_97012b446e314f45ba6680758a24af74", "_model_module": "@jupyter-widgets/controls", "icon": ""}}, "ca3bf7b44dd04b3396f9c9d0fa74ee43": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "1ae14e5c610a40f997c99a678eabcdb6": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "95b2f6aef4d041608079dfa073d138d8": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "20d6819cd0444637912333b3d833cc90": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "92372958a88447938928e29ce8cf7b81": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "f5902d0568014b178baa308a059c57b9": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "da68562c770b42228c3af01d021b9026": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "ea240d9f4ffc4e65bfc0f7df784e0e35": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "13bd3c1dff8345a68a19a5f76de4d191": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "95d928c7d8644ac5939f8ea76bdf50f1": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "28ebad4388b2445ea75e774af42f8ab4": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "5361018e8efa4ce687b105505e17394a": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "d4ddb6596541483c91943e2ef36de6a7": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "4d3945f46d83454a93ef4ce6327aa98d": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "186989d519f143669a7e99f0aef155e0": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "ed35af2658384955aaceac05c654b3e2": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "1df23cba8b0d4497a658028e45303429": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "6c76500652934d44b9c69a447bc18aa9": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "b3a907e86d6a40368ea21e8eb1c04d24": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "970abfe7ad85444eb1735bbc2a5dfe86": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "b1fed686962e43a3b7b0bee023b74a84": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "b14ec0a873eb4f6b8632e345cadabd7a": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": "150px", "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}, "e3814c1269b3489089a66efac2a290f2": {"model_module": "@jupyter-widgets/controls", "model_name": "ButtonStyleModel", "state": {"_view_name": "StyleView", "_model_name": "ButtonStyleModel", "_view_module": "@jupyter-widgets/base", "_model_module_version": "1.5.0", "_view_count": null, "button_color": null, "font_weight": "", "_view_module_version": "1.2.0", "_model_module": "@jupyter-widgets/controls"}}, "97012b446e314f45ba6680758a24af74": {"model_module": "@jupyter-widgets/base", "model_name": "LayoutModel", "state": {"_view_name": "LayoutView", "grid_template_rows": null, "right": null, "justify_content": null, "_view_module": "@jupyter-widgets/base", "overflow": null, "_model_module_version": "1.2.0", "_view_count": null, "flex_flow": null, "width": null, "min_width": null, "border": null, "align_items": null, "bottom": null, "_model_module": "@jupyter-widgets/base", "top": null, "grid_column": null, "overflow_y": null, "overflow_x": null, "grid_auto_flow": null, "grid_area": null, "grid_template_columns": null, "flex": null, "_model_name": "LayoutModel", "justify_items": null, "grid_row": null, "max_height": null, "align_content": null, "visibility": null, "align_self": null, "height": null, "min_height": null, "padding": null, "grid_auto_rows": null, "grid_gap": null, "max_width": null, "order": null, "_view_module_version": "1.2.0", "grid_template_areas": null, "object_position": null, "object_fit": null, "grid_auto_columns": null, "margin": null, "display": null, "left": null}}}
+</script>
+
+
+
+  </div><!-- from https://github.com/utterance/utterances -->
+<script src="https://utteranc.es/client.js"
+        repo="joedockrill/blog"
+        issue-term="title"
+        label="blogpost-comment"
+        theme="github-light"
+        crossorigin="anonymous"
+        async>
+</script><a class="u-url" href="/blog/2020/09/18/jmd-imagescraper-library/" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/blog/"></data>
+
+  <div class="wrapper">
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/blog/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/blog/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+        <ul class="contact-list">
+          <li class="p-name">Joe Dockrill</li>
+          <li><a class="u-email" href="mailto:joedockrill@gmail.com">joedockrill@gmail.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p>
+          <a href="https://www.buymeacoffee.com/joedockrill" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-blue.png" alt="Buy Me A Coffee" width="200px"></a>
+        </p>
+        <p>
+          Built using <a href="https://github.com/fastai/fastpages"><img src="/blog/images/favicon.ico">fastpages</a>
+       </p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/joedockrill" title="joedockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://www.linkedin.com/in/joe-dockrill" title="joe-dockrill"><svg class="svg-icon grey"><use xlink:href="/blog/assets/minima-social-icons.svg#linkedin"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
