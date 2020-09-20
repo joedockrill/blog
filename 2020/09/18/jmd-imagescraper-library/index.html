@@ -109,7 +109,7 @@ window.onload = wrap_img;
        • <span class="read-time" title="Estimated read time">
     
     
-      1 min read
+      2 min read
     
 </span></p>
 
@@ -160,7 +160,21 @@ window.onload = wrap_img;
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p>Somebody asked at some point if I could turn my image scraping notebook into an installable library, and I've been meaning to have a look at <a href="https://nbdev.fast.ai/">nbdev</a> for a while anyway.</p>
-<p>Nbdev is great as it basically lets you develop a software library in Jupyter notebooks, and then turns them into library + documentation + install packages. I can't recommend it highly enough. It's well worth watching the youtube video to get an idea of what it does.</p>
+<p>Nbdev is great as it basically lets you develop a software library in Jupyter notebooks, and from your notebooks it creates library + documentation + install packages. You can also include tests in your notebooks and these tests will be run as part of the CI process, <strong>and</strong> if you choose can be shown in the documentation which can help people understand the behaviour they can expect from your code.</p>
+<p>If you've been developing software for more than 5 minutes in a professional environment, you'll know that even with the best will in the world, code &amp; docs &amp; tests are often not in sync. When everything is generated from one place, you'd actually have to put effort into getting this wrong.</p>
+<p>I can't recommend it highly enough, and it's well worth watching the youtube video on <a href="https://nbdev.fast.ai/tutorial.html">the tutorial page</a> to get an idea of what it does.</p>
+<p>As a quick example, the following cell in my source notebook:</p>
+<div class="highlight"><pre><span></span><span class="c1">#export</span>
+<span class="k">def</span> <span class="nf">rmtree</span><span class="p">(</span><span class="n">path</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Path</span><span class="p">]):</span>
+    <span class="sd">'''Recursively delete a directory tree'''</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">path</span><span class="p">);</span> <span class="k">assert</span> <span class="n">path</span><span class="o">.</span><span class="n">is_dir</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s1">'**/*'</span><span class="p">))):</span>
+        <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">is_file</span><span class="p">():</span>  <span class="n">p</span><span class="o">.</span><span class="n">unlink</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="n">p</span><span class="o">.</span><span class="n">is_dir</span><span class="p">():</span> <span class="n">p</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+    <span class="n">path</span><span class="o">.</span><span class="n">rmdir</span><span class="p">()</span>
+</pre></div>
+<p>becomes <a href="https://joedockrill.github.io/jmd_imagescraper/core.html#rmtree">this part of the docs</a>, and <a href="https://github.com/joedockrill/jmd_imagescraper/blob/master/jmd_imagescraper/core.py#L146">this part of the library</a>, just because i put <code>#export</code> at the top of the cell.</p>
+<p>If you look at the docs you'll see that any cells (markdown or code) which follow a function export, become part of the docs unless I choose to hide them, so I can add explanation, thought process, and runnable code examples. It's the ultimate self documenting code.</p>
 <p>So now you can use my image scraper like this (which is far more convenient, let's be honest):</p>
 
 </div>
@@ -382,7 +396,13 @@ Downloading results into /content/images/Birds
 <div class="cell border-box-sizing text_cell rendered">
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Boom. Docs are at <a href="https://joedockrill.github.io/jmd_imagescraper/">https://joedockrill.github.io/jmd_imagescraper/</a>, the repo it was all generated from is at <a href="https://github.com/joedockrill/jmd_imagescraper/">https://github.com/joedockrill/jmd_imagescraper/</a> but the meat of it is basically just in 00_core.ipynb, 01_imagecleaner.ipynb and index.ipynb.</p>
+<p>Boom.</p>
+<ul>
+<li>Docs: <a href="https://joedockrill.github.io/jmd_imagescraper/">https://joedockrill.github.io/jmd_imagescraper/</a>
+</li>
+<li>Repo: <a href="https://github.com/joedockrill/jmd_imagescraper/">https://github.com/joedockrill/jmd_imagescraper/</a> </li>
+</ul>
+<p>The repo contains quite a few files but the meat of it is basically in 00_core.ipynb, 01_imagecleaner.ipynb (which are the two modules in my lib) and index.ipynb (which is the homepage for my docs).</p>
 <p>I'll write more about this later I'm sure but for now I just wanted to let people know it's available as a package.</p>
 
 </div>
